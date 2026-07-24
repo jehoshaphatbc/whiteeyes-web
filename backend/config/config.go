@@ -49,15 +49,29 @@ func Load() {
 	jwtRefresh, _ := strconv.Atoi(getEnv("JWT_REFRESH_HOURS", "168"))
 	s3SSL, _ := strconv.ParseBool(getEnv("S3_USE_SSL", "false"))
 
+	dbURL := getEnv("DATABASE_URL", "")
+	if dbURL == "" {
+		dbURL = getEnv("POSTGRES_URL", "whiteeyes.db")
+	}
+
+	dbDriver := getEnv("DATABASE_DRIVER", "")
+	if dbDriver == "" {
+		if dbURL != "whiteeyes.db" && (len(dbURL) > 8 && (dbURL[:8] == "postgres" || dbURL[:10] == "postgresql")) {
+			dbDriver = "postgres"
+		} else {
+			dbDriver = "sqlite"
+		}
+	}
+
 	App = &Config{
 		Port:            getEnv("PORT", "8080"),
 		Env:             getEnv("APP_ENV", "development"),
-		DatabaseURL:     getEnv("DATABASE_URL", "whiteeyes.db"),
-		DatabaseDriver:  getEnv("DATABASE_DRIVER", "sqlite"),
+		DatabaseURL:     dbURL,
+		DatabaseDriver:  dbDriver,
 		JWTSecret:       requireEnv("JWT_SECRET"),
 		JWTExpiryHours:  jwtExpiry,
 		JWTRefreshHours: jwtRefresh,
-		CORSOrigin:      getEnv("CORS_ORIGIN", "http://localhost:3000"),
+		CORSOrigin:      getEnv("CORS_ORIGIN", "*"),
 		StorageBackend:  getEnv("STORAGE_BACKEND", "local"),
 		UploadDir:       getEnv("UPLOAD_DIR", "./uploads"),
 		UploadBaseURL:   getEnv("UPLOAD_BASE_URL", "http://localhost:8080/uploads"),
