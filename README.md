@@ -2,6 +2,8 @@
 
 A premium, dark, brutal, atmospheric single-page band profile website with an admin CMS dashboard for subterranean Extreme Death Metal band **WHITEEYES**.
 
+*Branch Workflow: `main` (default / production) | `dev` (development)*
+
 ## 🛠 Tech Stack
 
 - **Frontend**: Nuxt 3 (Vue 3, TypeScript, `<script setup>`), Tailwind CSS (Custom Dark Void Theme), Pinia, VueUse, Nuxt Image
