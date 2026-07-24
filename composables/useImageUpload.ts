@@ -7,16 +7,27 @@ export const useImageUpload = () => {
     error.value = null
 
     try {
-      // Convert file to Base64 data URI for instant client preview and storage
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await $fetch<{ url: string; provider: string }>('/api/admin/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (response && response.url) {
+        return response.url
+      }
+      throw new Error('Upload returned no URL')
+    } catch (err: any) {
+      console.warn('Vercel Blob endpoint error, falling back to client Base64:', err)
+      // Client-side fallback if server fails
       return await new Promise<string>((resolve, reject) => {
         const reader = new FileReader()
         reader.onload = () => resolve(reader.result as string)
         reader.onerror = (e) => reject(e)
         reader.readAsDataURL(file)
       })
-    } catch (err: any) {
-      error.value = err.message || 'Image processing failed'
-      return null
     } finally {
       uploading.value = false
     }
