@@ -3,17 +3,17 @@ const { user, logout } = useAuth()
 </script>
 
 <template>
-  <header class="h-16 bg-slate-900 border-b border-slate-800 px-6 flex items-center justify-between text-slate-300">
-    <div class="flex items-center gap-2">
-      <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-      <span class="text-xs font-mono text-slate-400">NUXT 3 NITRO ENGINE ONLINE</span>
+  <header class="h-16 bg-void-charcoal border-b border-void-border px-6 flex items-center justify-between text-offwhite">
+    <div class="flex items-center gap-3">
+      <span class="inline-block w-2.5 h-2.5 rounded-full bg-blood animate-pulse"></span>
+      <span class="font-mono text-xs text-ash tracking-widest uppercase">NUXT 3 NITRO CMS ONLINE</span>
     </div>
 
-    <div class="flex items-center gap-4">
-      <span class="text-sm text-slate-300">{{ user?.email || 'admin@whiteeyes.metal' }}</span>
+    <div class="flex items-center gap-6 font-mono text-xs">
+      <span class="text-offwhite">{{ user?.email || 'admin@whiteeyes.metal' }}</span>
       <button
         @click="logout"
-        class="text-xs font-medium px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+        class="btn-brutal text-[11px] py-1.5 px-4"
       >
         LOGOUT
       </button>

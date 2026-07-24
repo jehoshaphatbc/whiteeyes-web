@@ -31,17 +31,17 @@ const updateMilestones = () => {
 <template>
   <div class="space-y-3">
     <div class="flex items-center justify-between">
-      <label class="block text-sm font-medium text-slate-300">BAND CHRONOLOGY / MILESTONES</label>
+      <label class="block font-mono text-xs text-ash tracking-widest uppercase">BAND CHRONOLOGY / MILESTONES</label>
       <button
         type="button"
         @click="addMilestone"
-        class="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
+        class="font-mono text-xs text-blood hover:text-white uppercase font-bold"
       >
-        + Add Milestone
+        + ADD MILESTONE
       </button>
     </div>
 
-    <div v-if="!milestones.length" class="text-xs text-slate-500 italic">No milestones added.</div>
+    <div v-if="!milestones.length" class="font-mono text-xs text-ash/60 italic">NO MILESTONES ADDED.</div>
 
     <div v-for="(m, index) in milestones" :key="index" class="flex items-center gap-3">
       <input
@@ -49,19 +49,19 @@ const updateMilestones = () => {
         @input="updateMilestones"
         type="number"
         placeholder="Year"
-        class="w-24 bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-200 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+        class="w-24 bg-void border border-void-border px-3 py-2 font-mono text-xs text-offwhite focus:border-blood focus:outline-none"
       />
       <input
         v-model="m.text"
         @input="updateMilestones"
         type="text"
         placeholder="Milestone description..."
-        class="flex-1 bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-200 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+        class="flex-1 bg-void border border-void-border px-3 py-2 font-mono text-xs text-offwhite focus:border-blood focus:outline-none"
       />
       <button
         type="button"
         @click="removeMilestone(index)"
-        class="text-slate-500 hover:text-red-400 text-xs px-2 py-1"
+        class="text-ash hover:text-blood font-mono text-xs px-2 py-1"
       >
         ✕
       </button>

@@ -88,41 +88,42 @@ const executeDelete = async () => {
 
 <template>
   <div class="space-y-6">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-xl font-bold text-white">ARTWORK ARCHIVE</h1>
-        <p class="text-xs text-slate-400">Manage posters, album art, flyers, and merch illustrations</p>
+        <span class="font-mono text-xs text-blood tracking-widest uppercase">// MODULE 05</span>
+        <h1 class="font-display text-4xl text-white uppercase tracking-wider">ARTWORK ARCHIVE MASONRY</h1>
+        <p class="font-mono text-xs text-ash tracking-widest uppercase mt-1">MANAGE POSTERS, ALBUM ART, FLYERS, AND MERCH PRINTS</p>
       </div>
       <button
         @click="openCreateModal"
-        class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg text-xs transition-colors shadow"
+        class="btn-brutal-primary text-xs py-3 px-6 shrink-0"
       >
-        + ADD ARTWORK
+        + ADD ARTWORK ↗
       </button>
     </div>
 
-    <div v-if="loading" class="text-slate-400 text-sm">Loading artwork...</div>
+    <div v-if="loading" class="font-mono text-xs text-ash tracking-widest uppercase">LOADING ARTWORK...</div>
 
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <div
         v-for="item in items"
         :key="item.id"
-        class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow flex flex-col justify-between"
+        class="bg-void-charcoal border border-void-border overflow-hidden flex flex-col justify-between group"
       >
-        <div class="relative aspect-square bg-slate-950">
-          <img :src="item.image_url" :alt="item.title" class="w-full h-full object-cover" />
-          <div class="absolute top-2 right-2 bg-slate-900/90 backdrop-blur-sm px-2 py-0.5 rounded font-mono text-[10px] text-indigo-400">
+        <div class="relative aspect-square bg-void">
+          <img :src="item.image_url" :alt="item.title" class="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-500" />
+          <div class="absolute top-2 right-2 bg-void/90 border border-void-border px-2 py-1 font-mono text-[10px] text-blood uppercase">
             {{ item.category }}
           </div>
         </div>
 
-        <div class="p-4 flex items-center justify-between">
+        <div class="p-4 flex items-center justify-between border-t border-void-border">
           <div>
-            <h3 class="font-bold text-sm text-white">{{ item.title }}</h3>
+            <h3 class="font-display text-lg text-white uppercase tracking-wider">{{ item.title }}</h3>
           </div>
-          <div class="space-x-2">
-            <button @click="openEditModal(item)" class="text-xs text-indigo-400 hover:text-indigo-300">EDIT</button>
-            <button @click="confirmDelete(item.id)" class="text-xs text-red-400 hover:text-red-300">DELETE</button>
+          <div class="space-x-3 font-mono text-xs">
+            <button @click="openEditModal(item)" class="text-offwhite hover:text-blood">EDIT</button>
+            <button @click="confirmDelete(item.id)" class="text-ash hover:text-blood">DELETE</button>
           </div>
         </div>
       </div>
@@ -130,25 +131,25 @@ const executeDelete = async () => {
 
     <!-- Edit/Create Modal -->
     <Teleport to="body">
-      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-lg w-full space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 class="font-bold text-lg text-white">{{ form.id ? 'EDIT ARTWORK' : 'ADD ARTWORK' }}</h3>
-            <button @click="showModal = false" class="text-slate-400 hover:text-white">✕</button>
+      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm">
+        <div class="bg-void-charcoal border border-void-border p-6 max-w-lg w-full space-y-4 font-sans">
+          <div class="flex items-center justify-between border-b border-void-border pb-3">
+            <h3 class="font-display text-2xl text-white uppercase tracking-wider">{{ form.id ? 'EDIT ARTWORK' : 'ADD ARTWORK' }}</h3>
+            <button @click="showModal = false" class="text-ash hover:text-white">✕</button>
           </div>
 
           <form @submit.prevent="save" class="space-y-4">
             <AdminImageUpload v-model="form.image_url" label="ARTWORK IMAGE" />
 
             <div>
-              <label class="block text-xs text-slate-300 mb-1">TITLE</label>
-              <input v-model="form.title" type="text" required class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm text-white focus:outline-none" />
+              <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">TITLE</label>
+              <input v-model="form.title" type="text" required class="w-full bg-void border border-void-border px-3 py-2 text-sm text-offwhite focus:border-blood focus:outline-none" />
             </div>
 
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs text-slate-300 mb-1">CATEGORY</label>
-                <select v-model="form.category" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm text-white focus:outline-none">
+                <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">CATEGORY</label>
+                <select v-model="form.category" class="w-full bg-void border border-void-border px-3 py-2 font-mono text-xs text-offwhite focus:border-blood focus:outline-none">
                   <option value="Album Art">Album Art</option>
                   <option value="Poster">Poster</option>
                   <option value="Flyer">Flyer</option>
@@ -157,14 +158,14 @@ const executeDelete = async () => {
                 </select>
               </div>
               <div>
-                <label class="block text-xs text-slate-300 mb-1">ALT TEXT (ACCESSIBILITY)</label>
-                <input v-model="form.alt_text" type="text" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm text-white focus:outline-none" />
+                <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">ALT TEXT</label>
+                <input v-model="form.alt_text" type="text" class="w-full bg-void border border-void-border px-3 py-2 text-sm text-offwhite focus:border-blood focus:outline-none" />
               </div>
             </div>
 
-            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
-              <button type="button" @click="showModal = false" class="px-4 py-2 text-xs bg-slate-800 text-slate-300 rounded">Cancel</button>
-              <button type="submit" class="px-4 py-2 text-xs bg-indigo-600 text-white rounded font-medium">Save Artwork</button>
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-void-border">
+              <button type="button" @click="showModal = false" class="btn-brutal text-xs py-2 px-4">CANCEL</button>
+              <button type="submit" class="btn-brutal-primary text-xs py-2 px-5">SAVE ARTWORK ↗</button>
             </div>
           </form>
         </div>

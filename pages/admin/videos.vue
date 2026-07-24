@@ -96,24 +96,25 @@ const executeDelete = async () => {
 
 <template>
   <div class="space-y-6">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-xl font-bold text-white">YOUTUBE VIDEOS</h1>
-        <p class="text-xs text-slate-400">Manage music videos, live performances, and studio footage</p>
+        <span class="font-mono text-xs text-blood tracking-widest uppercase">// MODULE 06</span>
+        <h1 class="font-display text-4xl text-white uppercase tracking-wider">YOUTUBE TRANSMISSIONS</h1>
+        <p class="font-mono text-xs text-ash tracking-widest uppercase mt-1">MANAGE MUSIC VIDEOS, LIVE PERFORMANCES, AND STUDIO FOOTAGE</p>
       </div>
       <button
         @click="openCreateModal"
-        class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg text-xs transition-colors shadow"
+        class="btn-brutal-primary text-xs py-3 px-6 shrink-0"
       >
-        + ADD VIDEO
+        + ADD VIDEO ↗
       </button>
     </div>
 
-    <div v-if="loading" class="text-slate-400 text-sm">Loading videos...</div>
+    <div v-if="loading" class="font-mono text-xs text-ash tracking-widest uppercase">LOADING VIDEOS...</div>
 
-    <div v-else class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow">
-      <table class="w-full text-left text-sm text-slate-300">
-        <thead class="bg-slate-950 text-xs font-mono text-slate-400 border-b border-slate-800">
+    <div v-else class="bg-void-charcoal border border-void-border overflow-hidden">
+      <table class="w-full text-left text-sm text-offwhite">
+        <thead class="bg-void font-mono text-xs text-ash uppercase border-b border-void-border">
           <tr>
             <th class="p-4">PREVIEW</th>
             <th class="p-4">TITLE</th>
@@ -122,20 +123,20 @@ const executeDelete = async () => {
             <th class="p-4 text-right">ACTIONS</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-800">
-          <tr v-for="item in items" :key="item.id" class="hover:bg-slate-850 transition-colors">
+        <tbody class="divide-y divide-void-border font-sans">
+          <tr v-for="item in items" :key="item.id" class="hover:bg-void transition-colors">
             <td class="p-4">
-              <img :src="`https://img.youtube.com/vi/${item.youtube_id}/hqdefault.jpg`" class="w-16 h-10 object-cover rounded border border-slate-700" />
+              <img :src="`https://img.youtube.com/vi/${item.youtube_id}/hqdefault.jpg`" class="w-16 h-10 object-cover border border-void-border" />
             </td>
-            <td class="p-4 font-bold text-white">{{ item.title }}</td>
-            <td class="p-4 font-mono text-xs text-slate-400">{{ item.youtube_id }}</td>
+            <td class="p-4 font-display text-xl text-white uppercase tracking-wider">{{ item.title }}</td>
+            <td class="p-4 font-mono text-xs text-ash">{{ item.youtube_id }}</td>
             <td class="p-4 font-mono text-xs">
-              <span v-if="item.is_featured" class="text-amber-400 font-bold">★ FEATURED</span>
-              <span v-else class="text-slate-500">—</span>
+              <span v-if="item.is_featured" class="text-blood font-bold">★ FEATURED</span>
+              <span v-else class="text-ash/40">—</span>
             </td>
-            <td class="p-4 text-right space-x-2">
-              <button @click="openEditModal(item)" class="text-xs text-indigo-400 hover:text-indigo-300">EDIT</button>
-              <button @click="confirmDelete(item.id)" class="text-xs text-red-400 hover:text-red-300">DELETE</button>
+            <td class="p-4 text-right space-x-3 font-mono text-xs">
+              <button @click="openEditModal(item)" class="text-offwhite hover:text-blood">EDIT</button>
+              <button @click="confirmDelete(item.id)" class="text-ash hover:text-blood">DELETE</button>
             </td>
           </tr>
         </tbody>
@@ -144,37 +145,37 @@ const executeDelete = async () => {
 
     <!-- Edit/Create Modal -->
     <Teleport to="body">
-      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-lg w-full space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 class="font-bold text-lg text-white">{{ form.id ? 'EDIT VIDEO' : 'ADD VIDEO' }}</h3>
-            <button @click="showModal = false" class="text-slate-400 hover:text-white">✕</button>
+      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm">
+        <div class="bg-void-charcoal border border-void-border p-6 max-w-lg w-full space-y-4 font-sans">
+          <div class="flex items-center justify-between border-b border-void-border pb-3">
+            <h3 class="font-display text-2xl text-white uppercase tracking-wider">{{ form.id ? 'EDIT VIDEO' : 'ADD VIDEO' }}</h3>
+            <button @click="showModal = false" class="text-ash hover:text-white">✕</button>
           </div>
 
           <form @submit.prevent="save" class="space-y-4">
             <div>
-              <label class="block text-xs text-slate-300 mb-1">TITLE</label>
-              <input v-model="form.title" type="text" required class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm text-white focus:outline-none" />
+              <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">TITLE</label>
+              <input v-model="form.title" type="text" required class="w-full bg-void border border-void-border px-3 py-2 text-sm text-offwhite focus:border-blood focus:outline-none" />
             </div>
 
             <div>
-              <label class="block text-xs text-slate-300 mb-1">YOUTUBE URL OR VIDEO ID</label>
-              <input v-model="form.youtube_id" type="text" placeholder="https://www.youtube.com/watch?v=... or ID" required class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm text-white focus:outline-none font-mono" />
+              <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">YOUTUBE URL OR VIDEO ID</label>
+              <input v-model="form.youtube_id" type="text" placeholder="https://www.youtube.com/watch?v=... or ID" required class="w-full bg-void border border-void-border px-3 py-2 font-mono text-xs text-offwhite focus:border-blood focus:outline-none" />
             </div>
 
             <div>
-              <label class="block text-xs text-slate-300 mb-1">DESCRIPTION</label>
-              <textarea v-model="form.description" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm text-white focus:outline-none"></textarea>
+              <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">DESCRIPTION</label>
+              <textarea v-model="form.description" rows="2" class="w-full bg-void border border-void-border px-3 py-2 text-sm text-offwhite focus:border-blood focus:outline-none"></textarea>
             </div>
 
-            <div class="flex items-center gap-2">
-              <input v-model="form.is_featured" type="checkbox" id="is_featured" class="rounded bg-slate-950 border-slate-800 text-indigo-600 focus:ring-0" />
-              <label for="is_featured" class="text-xs text-slate-300">FEATURE AS MAIN VIDEO EMBED</label>
+            <div class="flex items-center gap-3">
+              <input v-model="form.is_featured" type="checkbox" id="is_featured" class="bg-void border-void-border text-blood focus:ring-0 accent-blood" />
+              <label for="is_featured" class="font-mono text-xs text-offwhite uppercase">FEATURE AS MAIN VIDEO EMBED IN SECTION 05</label>
             </div>
 
-            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
-              <button type="button" @click="showModal = false" class="px-4 py-2 text-xs bg-slate-800 text-slate-300 rounded">Cancel</button>
-              <button type="submit" class="px-4 py-2 text-xs bg-indigo-600 text-white rounded font-medium">Save Video</button>
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-void-border">
+              <button type="button" @click="showModal = false" class="btn-brutal text-xs py-2 px-4">CANCEL</button>
+              <button type="submit" class="btn-brutal-primary text-xs py-2 px-5">SAVE VIDEO ↗</button>
             </div>
           </form>
         </div>

@@ -49,58 +49,59 @@ const save = async () => {
 
 <template>
   <div class="space-y-6">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-xl font-bold text-white">BAND PROFILE (HERO SECTION)</h1>
-        <p class="text-xs text-slate-400">Edit hero branding, logo, taglines, and global listen links</p>
+        <span class="font-mono text-xs text-blood tracking-widest uppercase">// MODULE 01</span>
+        <h1 class="font-display text-4xl text-white uppercase tracking-wider">BAND PROFILE & HERO BRANDING</h1>
+        <p class="font-mono text-xs text-ash tracking-widest uppercase mt-1">EDIT HERO BRANDING, LOGO, TAGLINES, AND GLOBAL LISTEN LINKS</p>
       </div>
       <button
         @click="save"
         :disabled="saving || loading"
-        class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium px-5 py-2 rounded-lg text-sm transition-colors shadow"
+        class="btn-brutal-primary text-xs py-3 px-6 shrink-0"
       >
-        {{ saving ? 'SAVING...' : 'SAVE CHANGES' }}
+        {{ saving ? 'SAVING...' : 'SAVE CHANGES ↗' }}
       </button>
     </div>
 
-    <div v-if="loading" class="text-slate-400 text-sm">Loading profile data...</div>
+    <div v-if="loading" class="font-mono text-xs text-ash tracking-widest uppercase">LOADING PROFILE DATA...</div>
 
-    <form v-else @submit.prevent="save" class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6">
+    <form v-else @submit.prevent="save" class="bg-void-charcoal border border-void-border p-6 md:p-8 space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">BAND NAME</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">BAND NAME</label>
           <input
             v-model="form.band_name"
             type="text"
             required
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-3 text-sm text-offwhite focus:border-blood focus:outline-none"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">GENRE LABEL</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">GENRE LABEL</label>
           <input
             v-model="form.genre_label"
             type="text"
             placeholder="e.g. Extreme Death Metal"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-3 text-sm text-offwhite focus:border-blood focus:outline-none"
           />
         </div>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-slate-300 mb-1">HERO TAGLINE / STATEMENT</label>
+        <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">HERO STATEMENT / TAGLINE</label>
         <textarea
           v-model="form.hero_tagline"
-          rows="2"
-          class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          rows="3"
+          class="w-full bg-void border border-void-border px-4 py-3 font-display text-lg tracking-widest text-offwhite uppercase focus:border-blood focus:outline-none"
         ></textarea>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <AdminImageUpload
           v-model="form.logo_url"
-          label="BAND LOGO (PNG/SVG PREFERRED)"
+          label="BAND LOGO (DISPLAYED IN HEADER & HERO)"
         />
 
         <AdminImageUpload
@@ -109,22 +110,22 @@ const save = async () => {
         />
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-800">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-void-border">
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">SPOTIFY ARTIST URL ("LISTEN NOW" CTA)</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">SPOTIFY ARTIST URL ("LISTEN NOW" CTA)</label>
           <input
             v-model="form.spotify_url"
             type="url"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-3 text-sm font-mono text-offwhite focus:border-blood focus:outline-none"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">YOUTUBE CHANNEL URL ("WATCH" CTA)</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">YOUTUBE CHANNEL URL ("WATCH" CTA)</label>
           <input
             v-model="form.youtube_url"
             type="url"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-3 text-sm font-mono text-offwhite focus:border-blood focus:outline-none"
           />
         </div>
       </div>

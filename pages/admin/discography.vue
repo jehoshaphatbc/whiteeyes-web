@@ -101,24 +101,25 @@ const setFeatured = async (id: number) => {
 
 <template>
   <div class="space-y-6">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-xl font-bold text-white">DISCOGRAPHY ARCHIVE</h1>
-        <p class="text-xs text-slate-400">Manage all albums, EPs, singles, and demos</p>
+        <span class="font-mono text-xs text-blood tracking-widest uppercase">// MODULE 04</span>
+        <h1 class="font-display text-4xl text-white uppercase tracking-wider">DISCOGRAPHY CATALOG</h1>
+        <p class="font-mono text-xs text-ash tracking-widest uppercase mt-1">MANAGE ALL ALBUMS, EPS, SINGLES, AND DEMOS</p>
       </div>
       <button
         @click="openCreateModal"
-        class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg text-xs transition-colors shadow"
+        class="btn-brutal-primary text-xs py-3 px-6 shrink-0"
       >
-        + ADD NEW RELEASE
+        + ADD NEW RELEASE ↗
       </button>
     </div>
 
-    <div v-if="loading" class="text-slate-400 text-sm">Loading discography...</div>
+    <div v-if="loading" class="font-mono text-xs text-ash tracking-widest uppercase">LOADING DISCOGRAPHY...</div>
 
-    <div v-else class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow">
-      <table class="w-full text-left text-sm text-slate-300">
-        <thead class="bg-slate-950 text-xs font-mono text-slate-400 border-b border-slate-800">
+    <div v-else class="bg-void-charcoal border border-void-border overflow-hidden">
+      <table class="w-full text-left text-sm text-offwhite">
+        <thead class="bg-void font-mono text-xs text-ash uppercase border-b border-void-border">
           <tr>
             <th class="p-4">COVER</th>
             <th class="p-4">TITLE</th>
@@ -128,26 +129,26 @@ const setFeatured = async (id: number) => {
             <th class="p-4 text-right">ACTIONS</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-800">
-          <tr v-for="item in releases" :key="item.id" class="hover:bg-slate-850 transition-colors">
+        <tbody class="divide-y divide-void-border font-sans">
+          <tr v-for="item in releases" :key="item.id" class="hover:bg-void transition-colors">
             <td class="p-4">
-              <img :src="item.cover_art_url" :alt="item.title" class="w-12 h-12 object-cover rounded border border-slate-700" />
+              <img :src="item.cover_art_url" :alt="item.title" class="w-12 h-12 object-cover border border-void-border filter grayscale contrast-125" />
             </td>
-            <td class="p-4 font-bold text-white">{{ item.title }}</td>
-            <td class="p-4 font-mono text-xs text-indigo-400">{{ item.release_type }}</td>
-            <td class="p-4 font-mono text-xs">{{ item.release_date }}</td>
+            <td class="p-4 font-display text-xl text-white uppercase tracking-wider">{{ item.title }}</td>
+            <td class="p-4 font-mono text-xs text-blood uppercase">{{ item.release_type }}</td>
+            <td class="p-4 font-mono text-xs text-ash">{{ item.release_date }}</td>
             <td class="p-4">
               <button
                 @click="setFeatured(item.id)"
-                class="px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-colors"
-                :class="item.is_featured ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'"
+                class="font-mono text-[10px] uppercase py-1 px-3 border transition-colors"
+                :class="item.is_featured ? 'bg-blood/20 text-white border-blood font-bold' : 'border-void-border text-ash hover:text-white'"
               >
                 {{ item.is_featured ? '★ FEATURED' : 'SET FEATURED' }}
               </button>
             </td>
-            <td class="p-4 text-right space-x-2">
-              <button @click="openEditModal(item)" class="text-xs text-indigo-400 hover:text-indigo-300">EDIT</button>
-              <button @click="confirmDelete(item.id)" class="text-xs text-red-400 hover:text-red-300">DELETE</button>
+            <td class="p-4 text-right space-x-3 font-mono text-xs">
+              <button @click="openEditModal(item)" class="text-offwhite hover:text-blood">EDIT</button>
+              <button @click="confirmDelete(item.id)" class="text-ash hover:text-blood">DELETE</button>
             </td>
           </tr>
         </tbody>
@@ -156,43 +157,43 @@ const setFeatured = async (id: number) => {
 
     <!-- Edit/Create Modal -->
     <Teleport to="body">
-      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-2xl w-full space-y-6 max-h-[90vh] overflow-y-auto">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 class="font-bold text-lg text-white">{{ form.id ? 'EDIT RELEASE' : 'ADD NEW RELEASE' }}</h3>
-            <button @click="showModal = false" class="text-slate-400 hover:text-white">✕</button>
+      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm">
+        <div class="bg-void-charcoal border border-void-border p-6 md:p-8 max-w-2xl w-full space-y-6 max-h-[90vh] overflow-y-auto">
+          <div class="flex items-center justify-between border-b border-void-border pb-4">
+            <h3 class="font-display text-2xl text-white uppercase tracking-wider">{{ form.id ? 'EDIT RELEASE' : 'ADD NEW RELEASE' }}</h3>
+            <button @click="showModal = false" class="text-ash hover:text-white">✕</button>
           </div>
 
-          <form @submit.prevent="save" class="space-y-4">
+          <form @submit.prevent="save" class="space-y-4 font-sans">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs text-slate-300 mb-1">TITLE</label>
-                <input v-model="form.title" type="text" required class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm text-white focus:outline-none" />
+                <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">TITLE</label>
+                <input v-model="form.title" type="text" required class="w-full bg-void border border-void-border px-3 py-2 text-sm text-offwhite focus:border-blood focus:outline-none" />
               </div>
               <div>
-                <label class="block text-xs text-slate-300 mb-1">RELEASE TYPE</label>
-                <input v-model="form.release_type" type="text" placeholder="Album / EP / Single" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm text-white focus:outline-none" />
+                <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">RELEASE TYPE</label>
+                <input v-model="form.release_type" type="text" placeholder="Album / EP / Single" class="w-full bg-void border border-void-border px-3 py-2 text-sm text-offwhite focus:border-blood focus:outline-none" />
               </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs text-slate-300 mb-1">RELEASE DATE / YEAR</label>
-                <input v-model="form.release_date" type="text" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm text-white focus:outline-none" />
+                <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">RELEASE DATE / YEAR</label>
+                <input v-model="form.release_date" type="text" class="w-full bg-void border border-void-border px-3 py-2 text-sm text-offwhite focus:border-blood focus:outline-none" />
               </div>
               <AdminImageUpload v-model="form.cover_art_url" label="COVER ARTWORK" />
             </div>
 
             <div>
-              <label class="block text-xs text-slate-300 mb-1">DESCRIPTION</label>
-              <textarea v-model="form.description" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm text-white focus:outline-none"></textarea>
+              <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">DESCRIPTION</label>
+              <textarea v-model="form.description" rows="2" class="w-full bg-void border border-void-border px-3 py-2 text-sm text-offwhite focus:border-blood focus:outline-none"></textarea>
             </div>
 
             <AdminStreamingLinksEditor v-model="form.streaming_links" />
 
-            <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
-              <button type="button" @click="showModal = false" class="px-4 py-2 text-xs bg-slate-800 text-slate-300 rounded">Cancel</button>
-              <button type="submit" class="px-4 py-2 text-xs bg-indigo-600 text-white rounded font-medium">Save Release</button>
+            <div class="flex items-center justify-end gap-4 pt-4 border-t border-void-border">
+              <button type="button" @click="showModal = false" class="btn-brutal text-xs py-2 px-4">CANCEL</button>
+              <button type="submit" class="btn-brutal-primary text-xs py-2 px-5">SAVE RELEASE ↗</button>
             </div>
           </form>
         </div>

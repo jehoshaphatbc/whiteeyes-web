@@ -40,7 +40,8 @@ defineProps<{
         </h1>
       </div>
 
-      <p class="max-w-2xl font-mono text-ash text-sm md:text-base tracking-widest uppercase mb-12 leading-relaxed">
+      <!-- Hero Statement with font-display styling -->
+      <p class="max-w-3xl font-display text-xl sm:text-3xl md:text-4xl text-offwhite tracking-widest uppercase mb-12 leading-tight text-shadow">
         {{ bandProfile?.hero_tagline || 'CHRONICLES OF VISCERAL DECAY AND DISSOLUTION' }}
       </p>
 

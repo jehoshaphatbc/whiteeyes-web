@@ -21,25 +21,28 @@ const emit = defineEmits(['confirm', 'cancel'])
     >
       <div
         v-if="show"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
         @click.self="emit('cancel')"
       >
-        <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-sm w-full space-y-4 shadow-2xl">
-          <h3 class="text-lg font-bold text-white">{{ title || 'Confirm Action' }}</h3>
-          <p class="text-sm text-slate-400">{{ message || 'Are you sure you want to proceed?' }}</p>
+        <div class="bg-void-charcoal border border-blood/60 p-6 max-w-sm w-full space-y-6 shadow-[0_0_50px_rgba(0,0,0,0.9)]">
+          <div class="space-y-2">
+            <span class="font-mono text-[10px] text-blood tracking-widest uppercase">// WARNING</span>
+            <h3 class="font-display text-2xl text-white uppercase tracking-wider">{{ title || 'CONFIRM DELETION' }}</h3>
+            <p class="font-sans text-sm text-ash leading-relaxed">{{ message || 'Are you sure you want to proceed? This action cannot be undone.' }}</p>
+          </div>
 
-          <div class="flex items-center justify-end gap-3 pt-2">
+          <div class="flex items-center justify-end gap-4 pt-2 border-t border-void-border">
             <button
               @click="emit('cancel')"
-              class="px-4 py-2 rounded text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+              class="btn-brutal text-xs py-2 px-4"
             >
-              Cancel
+              CANCEL
             </button>
             <button
               @click="emit('confirm')"
-              class="px-4 py-2 rounded text-xs font-medium bg-red-600 hover:bg-red-500 text-white transition-colors"
+              class="btn-brutal-primary text-xs py-2 px-4"
             >
-              {{ confirmText || 'Delete' }}
+              {{ confirmText || 'DELETE' }}
             </button>
           </div>
         </div>

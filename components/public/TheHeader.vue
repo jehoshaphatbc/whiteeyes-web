@@ -29,15 +29,15 @@ const scrollToSection = (id: string) => {
 <template>
   <header class="fixed top-0 left-0 right-0 z-50 bg-void/90 backdrop-blur-md border-b border-void-border/50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <!-- Logo & Band Name -->
-      <a href="#hero" @click.prevent="scrollToSection('hero')" class="flex items-center gap-3 group">
+      <!-- Logo Only (Text title removed) -->
+      <a href="#hero" @click.prevent="scrollToSection('hero')" class="flex items-center group py-2">
         <img
           v-if="bandProfile?.logo_url"
           :src="bandProfile.logo_url"
           :alt="bandProfile.band_name || 'WHITEEYES'"
-          class="h-10 w-auto object-contain filter grayscale contrast-200 group-hover:brightness-125 transition-all"
+          class="h-12 w-auto object-contain filter grayscale contrast-200 group-hover:brightness-125 transition-all"
         />
-        <span class="font-display text-2xl tracking-widest text-offwhite group-hover:text-blood transition-colors">
+        <span v-else class="font-display text-3xl tracking-widest text-offwhite group-hover:text-blood transition-colors">
           {{ bandProfile?.band_name || 'WHITEEYES' }}
         </span>
       </a>

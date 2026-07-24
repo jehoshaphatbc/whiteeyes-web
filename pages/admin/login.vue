@@ -27,54 +27,52 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-950 flex items-center justify-center p-4 font-sans text-slate-100">
-    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl space-y-6">
+  <div class="min-h-screen bg-void flex items-center justify-center p-4 font-sans text-offwhite relative overflow-hidden">
+    <UiGrainOverlay />
+
+    <div class="max-w-md w-full bg-void-charcoal border border-void-border p-8 md:p-10 shadow-[0_0_50px_rgba(0,0,0,0.9)] relative z-10 space-y-8">
       <div class="text-center space-y-2">
-        <h1 class="font-bold text-2xl text-white tracking-wider uppercase">WHITEEYES CMS</h1>
-        <p class="text-xs text-slate-400 font-mono">ENTER ADMIN CREDENTIALS</p>
+        <span class="font-mono text-[10px] text-blood tracking-widest uppercase">// SECURE ACCESS</span>
+        <h1 class="font-display text-4xl text-white uppercase tracking-wider text-glitch">WHITEEYES CMS</h1>
+        <p class="font-mono text-xs text-ash tracking-widest uppercase">ENTER ADMIN CREDENTIALS</p>
       </div>
 
-      <form @submit.prevent="handleLogin" class="space-y-4">
+      <form @submit.prevent="handleLogin" class="space-y-6">
         <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">EMAIL ADDRESS</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">EMAIL ADDRESS</label>
           <input
             v-model="email"
             type="email"
             required
             placeholder="admin@whiteeyes.metal"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-3 text-sm text-offwhite focus:border-blood focus:outline-none transition-colors"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">PASSWORD</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">PASSWORD</label>
           <input
             v-model="password"
             type="password"
             required
             placeholder="••••••••"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-3 text-sm text-offwhite focus:border-blood focus:outline-none transition-colors"
           />
         </div>
 
-        <div v-if="errorMessage" class="bg-red-950/60 border border-red-800 text-red-300 text-xs p-3 rounded-lg">
-          {{ errorMessage }}
+        <div v-if="errorMessage" class="bg-blood-dark/50 border border-blood text-white font-mono text-xs p-3 uppercase tracking-wider">
+          ⚠ {{ errorMessage }}
         </div>
 
         <button
           type="submit"
           :disabled="loading"
-          class="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium py-3 rounded-lg text-sm transition-colors shadow-lg"
+          class="btn-brutal-primary w-full py-4 text-sm tracking-widest"
         >
           <span v-if="loading">AUTHENTICATING...</span>
-          <span v-else>SIGN IN TO CMS</span>
+          <span v-else>SIGN IN TO CMS ↗</span>
         </button>
       </form>
-
-      <div class="pt-4 border-t border-slate-800 text-center text-xs text-slate-500 font-mono">
-        DEMO SEED LOGIN: <br />
-        <span class="text-slate-300">admin@whiteeyes.metal</span> / <span class="text-slate-300">Whiteeyes2026!</span>
-      </div>
     </div>
   </div>
 </template>

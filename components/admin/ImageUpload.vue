@@ -33,15 +33,15 @@ const handleDrop = async (e: DragEvent) => {
 
 <template>
   <div class="space-y-2">
-    <label v-if="label" class="block text-sm font-medium text-slate-300">{{ label }}</label>
+    <label v-if="label" class="block font-mono text-xs text-ash tracking-widest uppercase mb-1">{{ label }}</label>
 
     <div class="flex items-start gap-4">
-      <div v-if="modelValue" class="relative group w-28 h-28 shrink-0 border border-slate-700 rounded-lg overflow-hidden bg-slate-900">
-        <img :src="modelValue" alt="Preview" class="w-full h-full object-cover" />
+      <div v-if="modelValue" class="relative group w-28 h-28 shrink-0 border border-void-border overflow-hidden bg-void-gray">
+        <img :src="modelValue" alt="Preview" class="w-full h-full object-cover filter grayscale contrast-125" />
         <button
           type="button"
           @click="emit('update:modelValue', '')"
-          class="absolute top-1 right-1 bg-red-600 text-white rounded p-1 opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+          class="absolute top-1 right-1 bg-blood text-white p-1 font-mono text-xs hover:bg-blood-bright transition-colors"
         >
           ✕
         </button>
@@ -52,7 +52,7 @@ const handleDrop = async (e: DragEvent) => {
           @dragover.prevent
           @drop.prevent="handleDrop"
           @click="fileInput?.click()"
-          class="border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-lg p-4 text-center cursor-pointer transition-colors bg-slate-900/50"
+          class="border border-dashed border-void-border hover:border-blood bg-void-charcoal p-4 text-center cursor-pointer transition-colors"
         >
           <input
             ref="fileInput"
@@ -61,22 +61,22 @@ const handleDrop = async (e: DragEvent) => {
             class="hidden"
             @change="handleFileChange"
           />
-          <p class="text-xs text-slate-400">
-            <span v-if="uploading" class="text-indigo-400">Processing image...</span>
-            <span v-else>Drag & drop an image here, or <span class="text-indigo-400 font-medium">browse</span></span>
+          <p class="font-mono text-xs text-ash uppercase">
+            <span v-if="uploading" class="text-blood font-bold">UPLOADING TO VERCEL BLOB...</span>
+            <span v-else>DRAG & DROP IMAGE HERE, OR <span class="text-blood underline">BROWSE</span></span>
           </p>
-          <p class="text-[10px] text-slate-500 mt-1">JPG, PNG, WEBP, GIF up to 10MB</p>
+          <p class="font-mono text-[10px] text-ash/60 mt-1 uppercase">VERCEL BLOB STORAGE (JPG, PNG, WEBP)</p>
         </div>
 
         <input
           :value="modelValue"
           @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
           type="url"
-          placeholder="Or paste external image URL..."
-          class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-200 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+          placeholder="OR PASTE EXTERNAL IMAGE URL..."
+          class="w-full bg-void border border-void-border px-3 py-2 font-mono text-xs text-offwhite focus:border-blood focus:outline-none transition-colors"
         />
 
-        <p v-if="error" class="text-xs text-red-400">{{ error }}</p>
+        <p v-if="error" class="font-mono text-xs text-blood">{{ error }}</p>
       </div>
     </div>
   </div>

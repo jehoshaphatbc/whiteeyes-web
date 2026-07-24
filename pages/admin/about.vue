@@ -48,74 +48,75 @@ const save = async () => {
 
 <template>
   <div class="space-y-6">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-xl font-bold text-white">ABOUT / BIOGRAPHY</h1>
-        <p class="text-xs text-slate-400">Edit band biography, formation stats, photo, and timeline</p>
+        <span class="font-mono text-xs text-blood tracking-widest uppercase">// MODULE 02</span>
+        <h1 class="font-display text-4xl text-white uppercase tracking-wider">ABOUT & BIOGRAPHY NARRATIVE</h1>
+        <p class="font-mono text-xs text-ash tracking-widest uppercase mt-1">EDIT BAND BIOGRAPHY, FORMATION STATS, PHOTO, AND TIMELINE</p>
       </div>
       <button
         @click="save"
         :disabled="saving || loading"
-        class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium px-5 py-2 rounded-lg text-sm transition-colors shadow"
+        class="btn-brutal-primary text-xs py-3 px-6 shrink-0"
       >
-        {{ saving ? 'SAVING...' : 'SAVE CHANGES' }}
+        {{ saving ? 'SAVING...' : 'SAVE CHANGES ↗' }}
       </button>
     </div>
 
-    <div v-if="loading" class="text-slate-400 text-sm">Loading biography data...</div>
+    <div v-if="loading" class="font-mono text-xs text-ash tracking-widest uppercase">LOADING BIOGRAPHY DATA...</div>
 
-    <form v-else @submit.prevent="save" class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6">
+    <form v-else @submit.prevent="save" class="bg-void-charcoal border border-void-border p-6 md:p-8 space-y-6">
       <div>
-        <label class="block text-sm font-medium text-slate-300 mb-1">BIOGRAPHY TEXT (MARKDOWN SUPPORTED)</label>
+        <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">BIOGRAPHY NARRATIVE</label>
         <textarea
           v-model="form.biography"
           rows="6"
           required
-          class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none font-sans leading-relaxed"
+          class="w-full bg-void border border-void-border px-4 py-3 text-sm text-offwhite focus:border-blood focus:outline-none font-sans leading-relaxed"
         ></textarea>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">FORMED YEAR</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">FORMED YEAR</label>
           <input
             v-model.number="form.formed_year"
             type="number"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-2.5 font-mono text-sm text-offwhite focus:border-blood focus:outline-none"
           />
         </div>
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">ORIGIN (CITY/COUNTRY)</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">ORIGIN (CITY/COUNTRY)</label>
           <input
             v-model="form.origin"
             type="text"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-2.5 font-mono text-sm text-offwhite focus:border-blood focus:outline-none"
           />
         </div>
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">GENRE</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">GENRE</label>
           <input
             v-model="form.genre"
             type="text"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-2.5 font-mono text-sm text-offwhite focus:border-blood focus:outline-none"
           />
         </div>
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">STYLE DESCRIPTION</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">STYLE DESCRIPTION</label>
           <input
             v-model="form.style_description"
             type="text"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-2.5 font-mono text-sm text-offwhite focus:border-blood focus:outline-none"
           />
         </div>
       </div>
 
       <AdminImageUpload
         v-model="form.section_photo_url"
-        label="ABOUT SECTION PHOTO / VISUAL"
+        label="ABOUT SECTION BAND PHOTO"
       />
 
-      <div class="pt-4 border-t border-slate-800">
+      <div class="pt-6 border-t border-void-border">
         <AdminMilestonesEditor v-model="form.milestones" />
       </div>
     </form>

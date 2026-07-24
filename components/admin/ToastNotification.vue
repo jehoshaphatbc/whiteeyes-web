@@ -28,13 +28,13 @@ watch(() => props.show, (val) => {
     >
       <div
         v-if="show"
-        class="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-xl text-sm font-medium text-white border"
+        class="fixed bottom-6 right-6 z-50 flex items-center gap-4 px-6 py-4 border shadow-2xl font-mono text-xs uppercase tracking-wider text-white"
         :class="[
-          type === 'error' ? 'bg-red-900/90 border-red-700' : 'bg-emerald-900/90 border-emerald-700'
+          type === 'error' ? 'bg-blood-dark/95 border-blood' : 'bg-void-charcoal/95 border-blood text-offwhite'
         ]"
       >
         <span>{{ message }}</span>
-        <button @click="emit('close')" class="text-white/70 hover:text-white text-xs">✕</button>
+        <button @click="emit('close')" class="text-ash hover:text-white">✕</button>
       </div>
     </Transition>
   </Teleport>

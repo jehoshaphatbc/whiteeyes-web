@@ -15,30 +15,30 @@ const links = [
 </script>
 
 <template>
-  <aside class="w-64 bg-slate-900 border-r border-slate-800 text-slate-300 min-h-screen flex flex-col shrink-0">
-    <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+  <aside class="w-64 bg-void border-r border-void-border text-offwhite min-h-screen flex flex-col shrink-0">
+    <div class="p-6 border-b border-void-border flex items-center justify-between">
       <div>
-        <h1 class="font-bold text-white tracking-wider">WHITEEYES</h1>
-        <p class="text-xs text-slate-400 font-mono">CMS DASHBOARD</p>
+        <h1 class="font-display text-2xl tracking-widest text-white uppercase">WHITEEYES</h1>
+        <p class="font-mono text-[10px] text-blood tracking-widest uppercase">CMS CONTROL PORTAL</p>
       </div>
-      <NuxtLink to="/" target="_blank" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium">
-        VIEW SITE ↗
+      <NuxtLink to="/" target="_blank" class="font-mono text-[11px] text-ash hover:text-blood transition-colors uppercase">
+        SITE ↗
       </NuxtLink>
     </div>
 
-    <nav class="flex-1 p-4 space-y-1">
+    <nav class="flex-1 p-4 space-y-1 font-display tracking-wider text-sm">
       <NuxtLink
         v-for="link in links"
         :key="link.path"
         :to="link.path"
-        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
+        class="flex items-center gap-3 px-4 py-3 border border-transparent transition-all duration-200"
         :class="[
           route.path === link.path
-            ? 'bg-indigo-600 text-white'
-            : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+            ? 'bg-blood text-white border-blood font-bold shadow-[0_0_15px_rgba(139,0,0,0.4)]'
+            : 'text-ash hover:text-white hover:bg-void-charcoal hover:border-void-border'
         ]"
       >
-        <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="link.icon" />
         </svg>
         <span>{{ link.label }}</span>

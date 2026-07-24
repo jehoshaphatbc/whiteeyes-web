@@ -31,37 +31,37 @@ const updateLinks = () => {
 <template>
   <div class="space-y-3">
     <div class="flex items-center justify-between">
-      <label class="block text-sm font-medium text-slate-300">STREAMING & STORE LINKS</label>
+      <label class="block font-mono text-xs text-ash tracking-widest uppercase">STREAMING & STORE LINKS</label>
       <button
         type="button"
         @click="addLink"
-        class="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
+        class="font-mono text-xs text-blood hover:text-white uppercase font-bold"
       >
-        + Add Platform
+        + ADD PLATFORM
       </button>
     </div>
 
-    <div v-if="!links.length" class="text-xs text-slate-500 italic">No links added yet.</div>
+    <div v-if="!links.length" class="font-mono text-xs text-ash/60 italic">NO PLATFORM LINKS ADDED.</div>
 
     <div v-for="(link, index) in links" :key="index" class="flex items-center gap-3">
       <input
         v-model="link.label"
         @input="updateLinks"
         type="text"
-        placeholder="Label (e.g. Spotify)"
-        class="w-1/3 bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-200 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+        placeholder="Platform Label (e.g. Spotify)"
+        class="w-1/3 bg-void border border-void-border px-3 py-2 font-mono text-xs text-offwhite focus:border-blood focus:outline-none"
       />
       <input
         v-model="link.url"
         @input="updateLinks"
         type="url"
         placeholder="https://..."
-        class="flex-1 bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-xs text-slate-200 focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+        class="flex-1 bg-void border border-void-border px-3 py-2 font-mono text-xs text-offwhite focus:border-blood focus:outline-none"
       />
       <button
         type="button"
         @click="removeLink(index)"
-        class="text-slate-500 hover:text-red-400 text-xs px-2 py-1"
+        class="text-ash hover:text-blood font-mono text-xs px-2 py-1"
       >
         ✕
       </button>

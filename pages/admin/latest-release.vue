@@ -57,39 +57,40 @@ const save = async () => {
 
 <template>
   <div class="space-y-6">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-xl font-bold text-white">FEATURED / LATEST RELEASE</h1>
-        <p class="text-xs text-slate-400">Edit the release spotlighted in section 02 on the front page</p>
+        <span class="font-mono text-xs text-blood tracking-widest uppercase">// MODULE 03</span>
+        <h1 class="font-display text-4xl text-white uppercase tracking-wider">FEATURED / LATEST RELEASE</h1>
+        <p class="font-mono text-xs text-ash tracking-widest uppercase mt-1">EDIT THE RELEASE SPOTLIGHTED IN SECTION 02 ON THE FRONT PAGE</p>
       </div>
       <button
         @click="save"
         :disabled="saving || loading"
-        class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium px-5 py-2 rounded-lg text-sm transition-colors shadow"
+        class="btn-brutal-primary text-xs py-3 px-6 shrink-0"
       >
-        {{ saving ? 'SAVING...' : 'SAVE CHANGES' }}
+        {{ saving ? 'SAVING...' : 'SAVE CHANGES ↗' }}
       </button>
     </div>
 
-    <div v-if="loading" class="text-slate-400 text-sm">Loading release data...</div>
+    <div v-if="loading" class="font-mono text-xs text-ash tracking-widest uppercase">LOADING RELEASE DATA...</div>
 
-    <form v-else @submit.prevent="save" class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6">
+    <form v-else @submit.prevent="save" class="bg-void-charcoal border border-void-border p-6 md:p-8 space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-slate-300 mb-1">RELEASE TITLE</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">RELEASE TITLE</label>
           <input
             v-model="form.title"
             type="text"
             required
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-3 font-display text-xl tracking-wider text-offwhite uppercase focus:border-blood focus:outline-none"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">RELEASE TYPE</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">RELEASE TYPE</label>
           <select
             v-model="form.release_type"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-3 font-mono text-sm text-offwhite focus:border-blood focus:outline-none"
           >
             <option value="Full-Length Album">Full-Length Album</option>
             <option value="EP">EP</option>
@@ -102,12 +103,12 @@ const save = async () => {
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label class="block text-sm font-medium text-slate-300 mb-1">RELEASE DATE / YEAR</label>
+          <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">RELEASE DATE / YEAR</label>
           <input
             v-model="form.release_date"
             type="text"
             placeholder="e.g. 2024 or March 2024"
-            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            class="w-full bg-void border border-void-border px-4 py-3 font-mono text-sm text-offwhite focus:border-blood focus:outline-none"
           />
         </div>
 
@@ -118,15 +119,15 @@ const save = async () => {
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-slate-300 mb-1">SHORT DESCRIPTION</label>
+        <label class="block font-mono text-xs text-ash tracking-widest uppercase mb-2">DESCRIPTION NARRATIVE</label>
         <textarea
           v-model="form.description"
           rows="3"
-          class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          class="w-full bg-void border border-void-border px-4 py-3 text-sm text-offwhite focus:border-blood focus:outline-none leading-relaxed"
         ></textarea>
       </div>
 
-      <div class="pt-4 border-t border-slate-800">
+      <div class="pt-6 border-t border-void-border">
         <AdminStreamingLinksEditor v-model="form.streaming_links" />
       </div>
     </form>
