@@ -15,24 +15,25 @@ export default <Partial<Config>>{
       colors: {
         void: {
           DEFAULT: '#0a0a0a',
-          charcoal: '#111111',
-          gray: '#1a1a1a',
-          metal: '#262626',
+          charcoal: '#141414',
+          gray: '#1f1f1f',
+          metal: '#2a2a2a',
           border: '#333333',
         },
+        // High-contrast vibrant red for extreme readability on dark backgrounds
         blood: {
-          DEFAULT: '#8b0000',
-          dark: '#5a0000',
-          bright: '#b22222',
+          DEFAULT: '#ff3333',
+          dark: '#b30000',
+          bright: '#ff6666',
         },
-        rust: '#6b3d2a',
-        bone: '#c8c0a8',
-        ash: '#999990',
-        offwhite: '#e8e8e0',
+        rust: '#8c4b35',
+        bone: '#e0d8c3',
+        ash: '#a3a3a3',
+        offwhite: '#f3f4f6',
       },
       fontFamily: {
         display: ['"Bebas Neue"', 'sans-serif'],
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['"Space Mono"', 'monospace'],
       },
       animation: {
