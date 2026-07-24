@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #0a0a0a;
+    color: #e8e8e0;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Custom scrollbar for dark aesthetic */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #262626;
+    border-radius: 0px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8b0000;
+  }
+
+  ::selection {
+    background: #8b0000;
+    color: #ffffff;
+  }
+}
+
+/* Analog Grain Noise Overlay */
+.bg-grain {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  width: 200%;
+  height: 200vh;
+  background: transparent url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.045"/></svg>') repeat;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Scanline Overlay */
+.bg-scanlines {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.3)
+  );
+  background-size: 100% 4px;
+}
+
+/* Distressed / Glitch Effects */
+.text-glitch {
+  text-shadow: 2px 0 #8b0000, -2px 0 #333333;
+}
+
+.hover-glitch:hover {
+  animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+/* Brutalist borders & buttons */
+.btn-brutal {
+  @apply relative inline-flex items-center justify-center font-display uppercase tracking-widest text-sm py-3 px-6 border border-void-border bg-void-gray text-offwhite transition-all duration-300 hover:border-blood hover:bg-blood hover:text-white hover:shadow-[0_0_15px_rgba(139,0,0,0.5)];
+}
+
+.btn-brutal-primary {
+  @apply relative inline-flex items-center justify-center font-display uppercase tracking-widest text-sm py-3 px-6 border border-blood bg-blood text-white transition-all duration-300 hover:bg-blood-bright hover:border-blood-bright hover:shadow-[0_0_20px_rgba(139,0,0,0.7)];
+}
