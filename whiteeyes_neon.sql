@@ -130,7 +130,7 @@ CREATE TABLE seo_settings (
 
 -- Admin User: admin@whiteeyes.metal / Whiteeyes2026!
 INSERT INTO admin_users (email, password_hash, role) VALUES 
-('admin@whiteeyes.metal', '$2a$10$jPkEiU0QgyGItNwX1YBYmuR/Ph0D4Rd/YKwuSR4BaH.tGip/Cuufq', 'admin');
+('admin@whiteeyes.metal', '$2a$10$jPkEiU0QgyGItNwX1YBYmuR/Ph0D4Rd/YKwuSR4BaH.tGip/Cuufq', 'superadmin');
 
 -- Band Profile (Hero Section)
 INSERT INTO band_profiles (id, band_name, logo_url, genre_label, hero_tagline, hero_bg_image_url, spotify_url, youtube_url) VALUES 
