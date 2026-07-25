@@ -119,6 +119,17 @@ export const memoryStore = {
     whatsapp_number: '6281234567890',
     closing_headline: 'JOIN THE ABYSS',
   },
+  seoSettings: {
+    id: 1,
+    meta_title: 'WHITEEYES — Extreme Death Metal',
+    meta_description: 'Official portal of subterranean Extreme Death Metal band WHITEEYES from Jakarta. Stream discography, view artwork, watch live transmissions, and order official merchandise.',
+    meta_keywords: 'WHITEEYES, Death Metal, Extreme Metal, Jakarta Death Metal, Underground Metal, Chronicles of Decay',
+    og_title: 'WHITEEYES — Extreme Death Metal',
+    og_description: 'Official portal of WHITEEYES. Underground Death Metal from Jakarta.',
+    og_image_url: '/favicon.png',
+    twitter_card_type: 'summary_large_image',
+    canonical_url: 'https://whiteeyes-web.vercel.app',
+  },
 }
 
 export async function ensureDbSchema() {
@@ -242,6 +253,20 @@ export async function ensureDbSchema() {
       );
     `
 
+    await sql`
+      CREATE TABLE IF NOT EXISTS seo_settings (
+        id SERIAL PRIMARY KEY,
+        meta_title TEXT,
+        meta_description TEXT,
+        meta_keywords TEXT,
+        og_title TEXT,
+        og_description TEXT,
+        og_image_url TEXT,
+        twitter_card_type VARCHAR(100),
+        canonical_url TEXT
+      );
+    `
+
     // Seed Admin User if missing
     const users = await sql`SELECT id FROM admin_users LIMIT 1`
     if (users.length === 0) {
@@ -315,6 +340,15 @@ export async function ensureDbSchema() {
       await sql`
         INSERT INTO social_links (id, instagram_url, spotify_url, youtube_url, facebook_url, whatsapp_number, closing_headline)
         VALUES (1, ${memoryStore.socialLinks.instagram_url}, ${memoryStore.socialLinks.spotify_url}, ${memoryStore.socialLinks.youtube_url}, ${memoryStore.socialLinks.facebook_url}, ${memoryStore.socialLinks.whatsapp_number}, ${memoryStore.socialLinks.closing_headline})
+      `
+    }
+
+    // Seed SEO Settings if missing
+    const seos = await sql`SELECT id FROM seo_settings LIMIT 1`
+    if (seos.length === 0) {
+      await sql`
+        INSERT INTO seo_settings (id, meta_title, meta_description, meta_keywords, og_title, og_description, og_image_url, twitter_card_type, canonical_url)
+        VALUES (1, ${memoryStore.seoSettings.meta_title}, ${memoryStore.seoSettings.meta_description}, ${memoryStore.seoSettings.meta_keywords}, ${memoryStore.seoSettings.og_title}, ${memoryStore.seoSettings.og_description}, ${memoryStore.seoSettings.og_image_url}, ${memoryStore.seoSettings.twitter_card_type}, ${memoryStore.seoSettings.canonical_url})
       `
     }
   } catch (err) {

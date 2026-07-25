@@ -17,6 +17,7 @@ onMounted(async () => {
 })
 
 const sections = [
+  { title: 'SEO & Meta Tags', path: '/admin/seo', desc: 'Dynamic page title, meta description, keywords, Open Graph image & canonical URL', count: '1 Singleton' },
   { title: 'Band Profile', path: '/admin/band-profile', desc: 'Hero branding, logo, taglines, and global streaming links', count: '1 Singleton' },
   { title: 'About / Biography', path: '/admin/about', desc: 'Biography narrative, formation stats, photo & timeline', count: '1 Singleton' },
   { title: 'Featured Release', path: '/admin/latest-release', desc: 'Spotlighted album/EP featured in section 02', count: '1 Singleton' },
@@ -33,12 +34,12 @@ const sections = [
     <div>
       <span class="text-xs font-semibold text-red-400 uppercase tracking-widest">// Dashboard</span>
       <h1 class="font-display text-4xl text-white uppercase tracking-wider mt-1">CMS Control Center</h1>
-      <p class="text-xs text-gray-400 font-medium mt-1">Select a module below to edit website content sections</p>
+      <p class="text-xs text-gray-400 font-medium mt-1">Select a module below to edit website content sections and SEO settings</p>
     </div>
 
     <div v-if="loading" class="text-xs text-gray-400 font-medium">Loading status...</div>
 
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <NuxtLink
         v-for="s in sections"
         :key="s.path"

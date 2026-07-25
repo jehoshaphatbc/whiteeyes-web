@@ -14,6 +14,7 @@ export default defineEventHandler(async () => {
       videos: memoryStore.videos,
       merch: memoryStore.merch,
       social_links: memoryStore.socialLinks,
+      seo_settings: memoryStore.seoSettings,
     }
   }
 
@@ -29,6 +30,7 @@ export default defineEventHandler(async () => {
     const videos = await sql`SELECT * FROM videos ORDER BY is_featured DESC, sort_order ASC, id DESC`
     const merch = await sql`SELECT * FROM merch_items ORDER BY sort_order ASC, id DESC`
     const [socialLinks] = await sql`SELECT * FROM social_links WHERE id = 1`
+    const [seoSettings] = await sql`SELECT * FROM seo_settings WHERE id = 1`
 
     // Attach streaming links to releases
     const discography = releases.map((r) => ({
@@ -47,6 +49,7 @@ export default defineEventHandler(async () => {
       videos: videos.length ? videos : memoryStore.videos,
       merch: merch.length ? merch : memoryStore.merch,
       social_links: socialLinks || memoryStore.socialLinks,
+      seo_settings: seoSettings || memoryStore.seoSettings,
     }
   } catch (err) {
     console.error('Error querying Neon postgres database:', err)
@@ -59,6 +62,7 @@ export default defineEventHandler(async () => {
       videos: memoryStore.videos,
       merch: memoryStore.merch,
       social_links: memoryStore.socialLinks,
+      seo_settings: memoryStore.seoSettings,
     }
   }
 })

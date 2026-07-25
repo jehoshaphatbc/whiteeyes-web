@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS artwork_items CASCADE;
 DROP TABLE IF EXISTS videos CASCADE;
 DROP TABLE IF EXISTS merch_items CASCADE;
 DROP TABLE IF EXISTS social_links CASCADE;
+DROP TABLE IF EXISTS seo_settings CASCADE;
 DROP TABLE IF EXISTS abouts CASCADE;
 DROP TABLE IF EXISTS band_profiles CASCADE;
 DROP TABLE IF EXISTS admin_users CASCADE;
@@ -111,6 +112,18 @@ CREATE TABLE social_links (
     closing_headline TEXT
 );
 
+CREATE TABLE seo_settings (
+    id SERIAL PRIMARY KEY,
+    meta_title TEXT,
+    meta_description TEXT,
+    meta_keywords TEXT,
+    og_title TEXT,
+    og_description TEXT,
+    og_image_url TEXT,
+    twitter_card_type VARCHAR(100),
+    canonical_url TEXT
+);
+
 -- =================================================================
 -- 3. INSERT DEMO SEED DATA
 -- =================================================================
@@ -173,6 +186,10 @@ INSERT INTO merch_items (name, description, price, image_url, sort_order) VALUES
 INSERT INTO social_links (id, instagram_url, spotify_url, youtube_url, facebook_url, whatsapp_number, closing_headline) VALUES 
 (1, 'https://instagram.com/whiteeyes.official', 'https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02', 'https://youtube.com/@whiteeyesmetal', 'https://facebook.com/whiteeyesband', '6281234567890', 'JOIN THE ABYSS');
 
+-- SEO Settings
+INSERT INTO seo_settings (id, meta_title, meta_description, meta_keywords, og_title, og_description, og_image_url, twitter_card_type, canonical_url) VALUES 
+(1, 'WHITEEYES — Extreme Death Metal', 'Official portal of subterranean Extreme Death Metal band WHITEEYES from Jakarta. Stream discography, view artwork, watch live transmissions, and order official merchandise.', 'WHITEEYES, Death Metal, Extreme Metal, Jakarta Death Metal, Underground Metal, Chronicles of Decay', 'WHITEEYES — Extreme Death Metal', 'Official portal of WHITEEYES. Underground Death Metal from Jakarta.', '/favicon.png', 'summary_large_image', 'https://whiteeyes-web.vercel.app');
+
 -- Adjust SERIAL Sequences
 SELECT setval('admin_users_id_seq', (SELECT MAX(id) FROM admin_users));
 SELECT setval('band_profiles_id_seq', (SELECT MAX(id) FROM band_profiles));
@@ -184,3 +201,4 @@ SELECT setval('artwork_items_id_seq', (SELECT MAX(id) FROM artwork_items));
 SELECT setval('videos_id_seq', (SELECT MAX(id) FROM videos));
 SELECT setval('merch_items_id_seq', (SELECT MAX(id) FROM merch_items));
 SELECT setval('social_links_id_seq', (SELECT MAX(id) FROM social_links));
+SELECT setval('seo_settings_id_seq', (SELECT MAX(id) FROM seo_settings));

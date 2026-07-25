@@ -101,6 +101,20 @@ export interface SocialLinks {
   updated_at?: string
 }
 
+export interface SeoSettings {
+  id: number
+  meta_title: string
+  meta_description: string
+  meta_keywords: string
+  og_title: string
+  og_description: string
+  og_image_url: string
+  twitter_card_type: string
+  canonical_url: string
+  created_at?: string
+  updated_at?: string
+}
+
 export interface PageContent {
   band_profile: BandProfile
   about: About
@@ -110,6 +124,7 @@ export interface PageContent {
   videos: Video[]
   merch: MerchItem[]
   social_links: SocialLinks
+  seo_settings: SeoSettings
 }
 
 export interface AdminUser {
