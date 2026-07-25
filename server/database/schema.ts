@@ -136,6 +136,40 @@ export const memoryStore = {
     twitter_card_type: 'summary_large_image',
     canonical_url: 'https://whiteeyes-web.vercel.app',
   },
+  blogPosts: [
+    {
+      id: 1,
+      title: 'Chronicles of Decay LP Official Release & Tour Manifest',
+      slug: 'chronicles-of-decay-release-and-tour-manifest',
+      excerpt: 'The subterranean sonic warfare is unleashed. Read the official release statement and upcoming tour locations across Southeast Asia.',
+      content: 'Forged in the cavernous underground rehearsals of Jakarta, our sophomore full-length album "CHRONICLES OF DECAY" is officially available worldwide.\n\nRecorded on analog tape and engineered to deliver suffocating dissonance, eight monolithic tracks explore bodily decay and metaphysical dissolution.\n\nPhysical merchandise and vinyl pressings are now shipping globally via Iron Tomb Records. Prepare for the upcoming tour transmissions across Indonesia, Malaysia, and Singapore.',
+      cover_image_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
+      author: 'WHITEEYES',
+      category: 'Announcement',
+      meta_title: 'Chronicles of Decay LP Release & Tour | WHITEEYES',
+      meta_description: 'Official release announcement for Chronicles of Decay LP and Southeast Asian tour manifest by WHITEEYES.',
+      meta_keywords: 'WHITEEYES, Chronicles of Decay, Death Metal Tour, LP Release',
+      is_published: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+    {
+      id: 2,
+      title: 'Subterranean Studio Transmissions: Recording Monolith of Filth',
+      slug: 'subterranean-studio-transmissions-recording-monolith-of-filth',
+      excerpt: 'An exclusive look inside our raw analog studio sessions during the creation of the cavernous EP Monolith of Filth.',
+      content: 'During the damp mid-monsoon months of 2022, WHITEEYES isolated inside a subterranean rehearsal bunker to capture the suffocating energy of "Monolith of Filth".\n\nRejecting digital quantisation and modern sterile drum replacement, every track was captured live in single takes with vintage valve microphones.\n\nVisual archives and studio photo documentation can be explored in our Artwork Gallery section.',
+      cover_image_url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop',
+      author: 'WHITEEYES',
+      category: 'Studio Report',
+      meta_title: 'Inside Monolith of Filth Studio Sessions | WHITEEYES',
+      meta_description: 'Behind the scenes into the analog studio recording sessions of Monolith of Filth EP.',
+      meta_keywords: 'WHITEEYES, Studio Report, Monolith of Filth, Recording Death Metal',
+      is_published: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+  ],
 }
 
 export async function ensureDbSchema() {
@@ -349,6 +383,25 @@ export async function ensureDbSchema() {
       `
     }
 
+    await sql`
+      CREATE TABLE IF NOT EXISTS blog_posts (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        slug VARCHAR(255) UNIQUE NOT NULL,
+        excerpt TEXT,
+        content TEXT,
+        cover_image_url TEXT,
+        author VARCHAR(100) DEFAULT 'WHITEEYES',
+        category VARCHAR(100) DEFAULT 'News',
+        meta_title VARCHAR(255),
+        meta_description TEXT,
+        meta_keywords VARCHAR(255),
+        is_published BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `
+
     // Seed SEO Settings if missing
     const seos = await sql`SELECT id FROM seo_settings LIMIT 1`
     if (seos.length === 0) {
@@ -356,6 +409,17 @@ export async function ensureDbSchema() {
         INSERT INTO seo_settings (id, meta_title, meta_description, meta_keywords, og_title, og_description, og_image_url, twitter_card_type, canonical_url)
         VALUES (1, ${memoryStore.seoSettings.meta_title}, ${memoryStore.seoSettings.meta_description}, ${memoryStore.seoSettings.meta_keywords}, ${memoryStore.seoSettings.og_title}, ${memoryStore.seoSettings.og_description}, ${memoryStore.seoSettings.og_image_url}, ${memoryStore.seoSettings.twitter_card_type}, ${memoryStore.seoSettings.canonical_url})
       `
+    }
+
+    // Seed Blog Posts if missing
+    const posts = await sql`SELECT id FROM blog_posts LIMIT 1`
+    if (posts.length === 0) {
+      for (const p of memoryStore.blogPosts) {
+        await sql`
+          INSERT INTO blog_posts (title, slug, excerpt, content, cover_image_url, author, category, meta_title, meta_description, meta_keywords, is_published)
+          VALUES (${p.title}, ${p.slug}, ${p.excerpt}, ${p.content}, ${p.cover_image_url}, ${p.author}, ${p.category}, ${p.meta_title}, ${p.meta_description}, ${p.meta_keywords}, ${p.is_published})
+        `
+      }
     }
   } catch (err) {
     console.error('Error auto-migrating database schema:', err)
