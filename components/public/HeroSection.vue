@@ -18,7 +18,7 @@ defineProps<{
       <div class="absolute inset-0 bg-scanlines opacity-40"></div>
     </div>
 
-    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center py-20 flex flex-col items-center">
+    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center py-20 flex flex-col items-center justify-center">
       <div class="inline-block border border-blood/50 bg-blood/10 px-4 py-1 mb-8 backdrop-blur-sm animate-flicker">
         <span class="font-mono text-xs tracking-widest text-blood uppercase">
           {{ bandProfile?.genre_label || 'EXTREME DEATH METAL' }}
@@ -34,7 +34,7 @@ defineProps<{
         />
         <h1
           v-else
-          class="font-display text-7xl sm:text-9xl md:text-[11rem] leading-none tracking-tighter text-white uppercase text-glitch"
+          class="font-display text-7xl sm:text-9xl md:text-[11rem] leading-none tracking-tighter text-white uppercase"
         >
           {{ bandProfile?.band_name || 'WHITEEYES' }}
         </h1>
@@ -45,7 +45,7 @@ defineProps<{
         {{ bandProfile?.hero_tagline || 'CHRONICLES OF VISCERAL DECAY AND DISSOLUTION' }}
       </p>
 
-      <div class="flex flex-col sm:flex-row items-center gap-6">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-md sm:max-w-none">
         <a
           :href="bandProfile?.spotify_url || 'https://spotify.com'"
           target="_blank"
@@ -65,10 +65,11 @@ defineProps<{
       </div>
     </div>
 
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 text-center animate-bounce">
-      <a href="#about" class="font-mono text-[10px] tracking-widest text-ash/60 hover:text-blood uppercase transition-colors">
-        SCROLL DOWN
-        <span class="block text-xs mt-1">↓</span>
+    <!-- 100% Centered Scroll Down Anchor for Mobile & Desktop -->
+    <div class="absolute bottom-6 inset-x-0 z-10 flex flex-col items-center justify-center text-center animate-bounce pointer-events-auto">
+      <a href="#about" class="font-mono text-[10px] sm:text-xs tracking-widest text-ash/70 hover:text-blood uppercase transition-colors flex flex-col items-center">
+        <span>SCROLL DOWN</span>
+        <span class="text-sm mt-1 font-bold">↓</span>
       </a>
     </div>
   </section>
