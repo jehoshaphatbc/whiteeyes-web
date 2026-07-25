@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import type { BlogPost } from '~/types/content'
 
+interface BlogCategory {
+  id: number
+  name: string
+  slug: string
+}
+
 definePageMeta({
   layout: 'admin',
 })
 
 const posts = ref<BlogPost[]>([])
+const categories = ref<BlogCategory[]>([])
 const loading = ref(true)
 const searchQuery = ref('')
 
@@ -26,7 +33,13 @@ const triggerToast = (msg: string, type: 'success' | 'error' | 'info' = 'success
 const showCreateModal = ref(false)
 const showEditModal = ref(false)
 const showDeleteModal = ref(false)
+const showCategoryModal = ref(false)
 const selectedPost = ref<BlogPost | null>(null)
+
+// Category Manager state
+const newCategoryName = ref('')
+const editingCategoryId = ref<number | null>(null)
+const editingCategoryName = ref('')
 
 // Form State
 const createForm = ref({
@@ -61,20 +74,27 @@ const editForm = ref({
 const formError = ref('')
 const isSubmitting = ref(false)
 
-const fetchPosts = async () => {
+const fetchData = async () => {
   loading.value = true
   try {
-    const data = await $fetch<BlogPost[]>('/api/admin/posts')
-    posts.value = data || []
+    const [postsData, catsData] = await Promise.all([
+      $fetch<BlogPost[]>('/api/admin/posts'),
+      $fetch<BlogCategory[]>('/api/categories'),
+    ])
+    posts.value = postsData || []
+    categories.value = catsData || []
+    if (categories.value.length > 0) {
+      if (!createForm.value.category) createForm.value.category = categories.value[0].name
+    }
   } catch (err: any) {
-    triggerToast(err.data?.statusMessage || 'Failed to fetch blog posts', 'error')
+    triggerToast(err.data?.statusMessage || 'Failed to fetch data', 'error')
   } finally {
     loading.value = false
   }
 }
 
 onMounted(() => {
-  fetchPosts()
+  fetchData()
 })
 
 const filteredPosts = computed(() => {
@@ -85,6 +105,50 @@ const filteredPosts = computed(() => {
   )
 })
 
+// Category CRUD
+const handleAddCategory = async () => {
+  if (!newCategoryName.value.trim()) return
+  try {
+    await $fetch('/api/admin/categories', {
+      method: 'POST',
+      body: { name: newCategoryName.value.trim() },
+    })
+    triggerToast('Category added successfully')
+    newCategoryName.value = ''
+    await fetchData()
+  } catch (err: any) {
+    triggerToast(err.data?.statusMessage || 'Failed to add category', 'error')
+  }
+}
+
+const handleEditCategory = async (catId: number) => {
+  if (!editingCategoryName.value.trim()) return
+  try {
+    await $fetch(`/api/admin/categories/${catId}`, {
+      method: 'PUT',
+      body: { name: editingCategoryName.value.trim() },
+    })
+    triggerToast('Category updated successfully')
+    editingCategoryId.value = null
+    editingCategoryName.value = ''
+    await fetchData()
+  } catch (err: any) {
+    triggerToast(err.data?.statusMessage || 'Failed to update category', 'error')
+  }
+}
+
+const handleDeleteCategory = async (catId: number) => {
+  try {
+    await $fetch(`/api/admin/categories/${catId}`, {
+      method: 'DELETE',
+    })
+    triggerToast('Category deleted successfully')
+    await fetchData()
+  } catch (err: any) {
+    triggerToast(err.data?.statusMessage || 'Failed to delete category', 'error')
+  }
+}
+
 // Create Post
 const openCreateModal = () => {
   createForm.value = {
@@ -94,7 +158,7 @@ const openCreateModal = () => {
     content: '',
     cover_image_url: '',
     author: 'WHITEEYES',
-    category: 'Announcement',
+    category: categories.value[0]?.name || 'Announcement',
     meta_title: '',
     meta_description: '',
     meta_keywords: '',
@@ -119,7 +183,7 @@ const handleCreatePost = async () => {
     })
     triggerToast('New blog post created successfully')
     showCreateModal.value = false
-    await fetchPosts()
+    await fetchData()
   } catch (err: any) {
     formError.value = err.data?.statusMessage || 'Failed to create post'
   } finally {
@@ -138,7 +202,7 @@ const openEditModal = (postItem: BlogPost) => {
     content: postItem.content || '',
     cover_image_url: postItem.cover_image_url || '',
     author: postItem.author || 'WHITEEYES',
-    category: postItem.category || 'News',
+    category: postItem.category || (categories.value[0]?.name || 'News'),
     meta_title: postItem.meta_title || '',
     meta_description: postItem.meta_description || '',
     meta_keywords: postItem.meta_keywords || '',
@@ -160,7 +224,7 @@ const handleEditPost = async () => {
     })
     triggerToast('Blog post updated successfully')
     showEditModal.value = false
-    await fetchPosts()
+    await fetchData()
   } catch (err: any) {
     formError.value = err.data?.statusMessage || 'Failed to update post'
   } finally {
@@ -198,7 +262,7 @@ const handleDeletePost = async () => {
     })
     triggerToast('Blog post deleted successfully')
     showDeleteModal.value = false
-    await fetchPosts()
+    await fetchData()
   } catch (err: any) {
     triggerToast(err.data?.statusMessage || 'Failed to delete post', 'error')
   } finally {
@@ -234,18 +298,30 @@ const formatDate = (dateStr?: string) => {
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-void-border pb-6">
       <div>
         <h1 class="font-display text-3xl tracking-wider text-white uppercase">BLOG POSTS & DISPATCHES</h1>
-        <p class="font-sans text-xs text-gray-400 mt-1">Manage articles, news releases, studio reports, and SEO metadata.</p>
+        <p class="font-sans text-xs text-gray-400 mt-1">Manage articles, WYSIWYG content, categories, and SEO metadata.</p>
       </div>
 
-      <button
-        @click="openCreateModal"
-        class="btn-brutal bg-blood text-white border-blood hover:bg-red-700 transition-all flex items-center justify-center gap-2 self-start md:self-auto"
-      >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        <span>CREATE NEW POST</span>
-      </button>
+      <div class="flex items-center gap-3 self-start md:self-auto">
+        <button
+          @click="showCategoryModal = true"
+          class="btn-brutal text-xs py-3 px-4 flex items-center gap-2"
+        >
+          <svg class="w-4 h-4 text-blood" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+          </svg>
+          <span>MANAGE CATEGORIES</span>
+        </button>
+
+        <button
+          @click="openCreateModal"
+          class="btn-brutal bg-blood text-white border-blood hover:bg-red-700 transition-all flex items-center justify-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          <span>CREATE NEW POST</span>
+        </button>
+      </div>
     </div>
 
     <!-- Search Bar -->
@@ -362,6 +438,95 @@ const formatDate = (dateStr?: string) => {
       </div>
     </div>
 
+    <!-- CATEGORY MANAGER MODAL -->
+    <div v-if="showCategoryModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div class="bg-void-charcoal border border-void-border rounded-xl p-6 max-w-lg w-full shadow-2xl space-y-5 relative">
+        <div class="flex items-center justify-between border-b border-void-border pb-3">
+          <h3 class="font-display text-xl text-white tracking-wider uppercase">MANAGE BLOG CATEGORIES</h3>
+          <button @click="showCategoryModal = false" class="text-gray-400 hover:text-white">✕</button>
+        </div>
+
+        <!-- Add Category Form -->
+        <form @submit.prevent="handleAddCategory" class="flex gap-2 font-sans">
+          <input
+            v-model="newCategoryName"
+            type="text"
+            placeholder="New Category Name (e.g. Tour Reviews)..."
+            class="flex-1 bg-void border border-void-border rounded-lg px-3.5 py-2 text-xs text-white focus:border-red-600 focus:outline-none"
+          />
+          <button
+            type="submit"
+            class="btn-brutal text-xs py-2 px-4 bg-blood text-white border-blood shrink-0"
+          >
+            ADD
+          </button>
+        </form>
+
+        <!-- Categories List -->
+        <div class="divide-y divide-void-border/60 max-h-60 overflow-y-auto pr-1">
+          <div
+            v-for="cat in categories"
+            :key="cat.id"
+            class="py-3 flex items-center justify-between gap-3 text-sm font-sans"
+          >
+            <!-- Normal view -->
+            <template v-if="editingCategoryId !== cat.id">
+              <div>
+                <span class="font-medium text-white">{{ cat.name }}</span>
+                <span class="text-xs text-gray-400 font-mono ml-2">({{ cat.slug }})</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button
+                  @click="editingCategoryId = cat.id; editingCategoryName = cat.name"
+                  class="text-xs text-gray-400 hover:text-white"
+                >
+                  Edit
+                </button>
+                <button
+                  @click="handleDeleteCategory(cat.id)"
+                  class="text-xs text-red-400 hover:text-red-300"
+                >
+                  Delete
+                </button>
+              </div>
+            </template>
+
+            <!-- Editing view -->
+            <template v-else>
+              <input
+                v-model="editingCategoryName"
+                type="text"
+                class="flex-1 bg-void border border-void-border px-2 py-1 text-xs text-white rounded focus:border-red-600 focus:outline-none"
+              />
+              <div class="flex items-center gap-2">
+                <button
+                  @click="handleEditCategory(cat.id)"
+                  class="text-xs text-green-400 font-bold"
+                >
+                  Save
+                </button>
+                <button
+                  @click="editingCategoryId = null"
+                  class="text-xs text-gray-400"
+                >
+                  Cancel
+                </button>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-void-border text-right">
+          <button
+            @click="showCategoryModal = false"
+            class="px-4 py-2 text-xs font-semibold text-gray-300 bg-void hover:bg-void-border rounded-lg"
+          >
+            CLOSE
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- CREATE POST MODAL -->
     <div v-if="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
       <div class="bg-void-charcoal border border-void-border rounded-xl p-6 max-w-3xl w-full shadow-2xl space-y-5 my-8 relative">
@@ -407,10 +572,9 @@ const formatDate = (dateStr?: string) => {
                 v-model="createForm.category"
                 class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"
               >
-                <option value="Announcement">Announcement</option>
-                <option value="Studio Report">Studio Report</option>
-                <option value="Tour News">Tour News</option>
-                <option value="Merchandise">Merchandise</option>
+                <option v-for="cat in categories" :key="cat.id" :value="cat.name">
+                  {{ cat.name }}
+                </option>
               </select>
             </div>
 
@@ -450,15 +614,10 @@ const formatDate = (dateStr?: string) => {
             ></textarea>
           </div>
 
+          <!-- WYSIWYG Content Editor -->
           <div>
-            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Article Body Content *</label>
-            <textarea
-              v-model="createForm.content"
-              rows="8"
-              required
-              placeholder="Write the full post text here (supports double linebreaks for paragraphs)..."
-              class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white font-sans text-sm focus:border-red-600 focus:outline-none"
-            ></textarea>
+            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Article Body Content (WYSIWYG Rich Editor) *</label>
+            <AdminWysiwygEditor v-model="createForm.content" placeholder="Write full formatted post content here..." />
           </div>
 
           <!-- SEO Collapsible Box -->
@@ -559,10 +718,9 @@ const formatDate = (dateStr?: string) => {
                 v-model="editForm.category"
                 class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"
               >
-                <option value="Announcement">Announcement</option>
-                <option value="Studio Report">Studio Report</option>
-                <option value="Tour News">Tour News</option>
-                <option value="Merchandise">Merchandise</option>
+                <option v-for="cat in categories" :key="cat.id" :value="cat.name">
+                  {{ cat.name }}
+                </option>
               </select>
             </div>
 
@@ -601,14 +759,10 @@ const formatDate = (dateStr?: string) => {
             ></textarea>
           </div>
 
+          <!-- WYSIWYG Content Editor -->
           <div>
-            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Article Body Content *</label>
-            <textarea
-              v-model="editForm.content"
-              rows="8"
-              required
-              class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white font-sans text-sm focus:border-red-600 focus:outline-none"
-            ></textarea>
+            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Article Body Content (WYSIWYG Rich Editor) *</label>
+            <AdminWysiwygEditor v-model="editForm.content" placeholder="Write full formatted post content here..." />
           </div>
 
           <!-- SEO Collapsible Box -->

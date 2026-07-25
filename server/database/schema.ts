@@ -170,6 +170,12 @@ export const memoryStore = {
       updated_at: new Date().toISOString(),
     },
   ],
+  blogCategories: [
+    { id: 1, name: 'Announcement', slug: 'announcement', created_at: new Date().toISOString() },
+    { id: 2, name: 'Studio Report', slug: 'studio-report', created_at: new Date().toISOString() },
+    { id: 3, name: 'Tour News', slug: 'tour-news', created_at: new Date().toISOString() },
+    { id: 4, name: 'Merchandise', slug: 'merchandise', created_at: new Date().toISOString() },
+  ],
 }
 
 export async function ensureDbSchema() {
@@ -384,6 +390,15 @@ export async function ensureDbSchema() {
     }
 
     await sql`
+      CREATE TABLE IF NOT EXISTS blog_categories (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) UNIQUE NOT NULL,
+        slug VARCHAR(100) UNIQUE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `
+
+    await sql`
       CREATE TABLE IF NOT EXISTS blog_posts (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
@@ -419,6 +434,14 @@ export async function ensureDbSchema() {
           INSERT INTO blog_posts (title, slug, excerpt, content, cover_image_url, author, category, meta_title, meta_description, meta_keywords, is_published)
           VALUES (${p.title}, ${p.slug}, ${p.excerpt}, ${p.content}, ${p.cover_image_url}, ${p.author}, ${p.category}, ${p.meta_title}, ${p.meta_description}, ${p.meta_keywords}, ${p.is_published})
         `
+      }
+    }
+
+    // Seed Blog Categories if missing
+    const cats = await sql`SELECT id FROM blog_categories LIMIT 1`
+    if (cats.length === 0) {
+      for (const c of memoryStore.blogCategories) {
+        await sql`INSERT INTO blog_categories (id, name, slug) VALUES (${c.id}, ${c.name}, ${c.slug})`
       }
     }
   } catch (err) {
