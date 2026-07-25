@@ -17,13 +17,19 @@ useSeoMeta({
   ogImage: '/favicon.png',
 })
 
+const fetchedCategories = ref<{ name: string }[]>([])
+
 const fetchPosts = async () => {
   loading.value = true
   try {
-    const data = await $fetch<BlogPost[]>('/api/posts')
-    posts.value = data || []
+    const [postsData, catsData] = await Promise.all([
+      $fetch<BlogPost[]>('/api/posts'),
+      $fetch<{ name: string }[]>('/api/categories'),
+    ])
+    posts.value = postsData || []
+    fetchedCategories.value = catsData || []
   } catch (err) {
-    console.error('Failed to fetch blog posts:', err)
+    console.error('Failed to fetch blog data:', err)
   } finally {
     loading.value = false
   }
@@ -36,6 +42,9 @@ onMounted(() => {
 const categories = computed(() => {
   const cats = new Set<string>()
   cats.add('All')
+  fetchedCategories.value.forEach((c) => {
+    if (c.name) cats.add(c.name)
+  })
   posts.value.forEach((p) => {
     if (p.category) cats.add(p.category)
   })

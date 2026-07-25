@@ -125,6 +125,13 @@ CREATE TABLE seo_settings (
     canonical_url TEXT
 );
 
+CREATE TABLE blog_categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    slug VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE blog_posts (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -213,6 +220,13 @@ INSERT INTO blog_posts (id, title, slug, excerpt, content, cover_image_url, auth
 (1, 'Chronicles of Decay LP Official Release & Tour Manifest', 'chronicles-of-decay-release-and-tour-manifest', 'The subterranean sonic warfare is unleashed. Read the official release statement and upcoming tour locations across Southeast Asia.', 'Forged in the cavernous underground rehearsals of Jakarta, our sophomore full-length album "CHRONICLES OF DECAY" is officially available worldwide.\n\nRecorded on analog tape and engineered to deliver suffocating dissonance, eight monolithic tracks explore bodily decay and metaphysical dissolution.\n\nPhysical merchandise and vinyl pressings are now shipping globally via Iron Tomb Records. Prepare for the upcoming tour transmissions across Indonesia, Malaysia, and Singapore.', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', 'WHITEEYES', 'Announcement', 'Chronicles of Decay LP Release & Tour | WHITEEYES', 'Official release announcement for Chronicles of Decay LP and Southeast Asian tour manifest by WHITEEYES.', 'WHITEEYES, Chronicles of Decay, Death Metal Tour, LP Release', TRUE),
 (2, 'Subterranean Studio Transmissions: Recording Monolith of Filth', 'subterranean-studio-transmissions-recording-monolith-of-filth', 'An exclusive look inside our raw analog studio sessions during the creation of the cavernous EP Monolith of Filth.', 'During the damp mid-monsoon months of 2022, WHITEEYES isolated inside a subterranean rehearsal bunker to capture the suffocating energy of "Monolith of Filth".\n\nRejecting digital quantisation and modern sterile drum replacement, every track was captured live in single takes with vintage valve microphones.\n\nVisual archives and studio photo documentation can be explored in our Artwork Gallery section.', 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop', 'WHITEEYES', 'Studio Report', 'Inside Monolith of Filth Studio Sessions | WHITEEYES', 'Behind the scenes into the analog studio recording sessions of Monolith of Filth EP.', 'WHITEEYES, Studio Report, Monolith of Filth, Recording Death Metal', TRUE);
 
+-- Blog Categories
+INSERT INTO blog_categories (id, name, slug) VALUES
+(1, 'Announcement', 'announcement'),
+(2, 'Studio Report', 'studio-report'),
+(3, 'Tour News', 'tour-news'),
+(4, 'Merchandise', 'merchandise');
+
 -- Adjust SERIAL Sequences
 SELECT setval('admin_users_id_seq', (SELECT MAX(id) FROM admin_users));
 SELECT setval('band_profiles_id_seq', (SELECT MAX(id) FROM band_profiles));
@@ -226,3 +240,4 @@ SELECT setval('merch_items_id_seq', (SELECT MAX(id) FROM merch_items));
 SELECT setval('social_links_id_seq', (SELECT MAX(id) FROM social_links));
 SELECT setval('seo_settings_id_seq', (SELECT MAX(id) FROM seo_settings));
 SELECT setval('blog_posts_id_seq', (SELECT MAX(id) FROM blog_posts));
+SELECT setval('blog_categories_id_seq', (SELECT MAX(id) FROM blog_categories));
