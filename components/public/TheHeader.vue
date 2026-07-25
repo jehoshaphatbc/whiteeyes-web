@@ -16,16 +16,12 @@ const navLinks = [
   { id: 'artwork', label: 'ARTWORK', path: '/#artwork' },
   { id: 'videos', label: 'VIDEOS', path: '/#videos' },
   { id: 'merch', label: 'MERCH', path: '/#merch' },
-  { id: 'blog', label: 'BLOG', path: '/blog', isPage: true },
+  { id: 'blog', label: 'BLOG', path: '/#blog' },
   { id: 'connect', label: 'CONNECT', path: '/#connect' },
 ]
 
 const navigateToLink = (link: typeof navLinks[0]) => {
   mobileMenuOpen.value = false
-  if (link.isPage) {
-    router.push('/blog')
-    return
-  }
   if (route.path !== '/') {
     router.push(`/#${link.id}`)
     return
@@ -55,33 +51,20 @@ const navigateToLink = (link: typeof navLinks[0]) => {
 
       <!-- Desktop Nav -->
       <nav class="hidden md:flex items-center gap-7 font-display tracking-widest text-sm">
-        <template v-for="link in navLinks" :key="link.id">
-          <NuxtLink
-            v-if="link.isPage"
-            to="/blog"
-            class="transition-colors duration-200 py-1 border-b-2"
-            :class="[
-              route.path.startsWith('/blog')
-                ? 'text-blood border-blood font-bold'
-                : 'text-ash border-transparent hover:text-offwhite'
-            ]"
-          >
-            {{ link.label }}
-          </NuxtLink>
-          <a
-            v-else
-            :href="link.path"
-            @click.prevent="navigateToLink(link)"
-            class="transition-colors duration-200 py-1 border-b-2 cursor-pointer"
-            :class="[
-              activeSection === link.id && route.path === '/'
-                ? 'text-blood border-blood font-bold'
-                : 'text-ash border-transparent hover:text-offwhite'
-            ]"
-          >
-            {{ link.label }}
-          </a>
-        </template>
+        <a
+          v-for="link in navLinks"
+          :key="link.id"
+          :href="link.path"
+          @click.prevent="navigateToLink(link)"
+          class="transition-colors duration-200 py-1 border-b-2 cursor-pointer"
+          :class="[
+            activeSection === link.id && route.path === '/'
+              ? 'text-blood border-blood font-bold'
+              : 'text-ash border-transparent hover:text-offwhite'
+          ]"
+        >
+          {{ link.label }}
+        </a>
       </nav>
 
       <!-- Listen Now CTA -->
@@ -117,26 +100,16 @@ const navigateToLink = (link: typeof navLinks[0]) => {
       v-if="mobileMenuOpen"
       class="md:hidden bg-void-charcoal border-b border-void-border px-6 py-6 space-y-4"
     >
-      <template v-for="link in navLinks" :key="link.id">
-        <NuxtLink
-          v-if="link.isPage"
-          to="/blog"
-          @click="mobileMenuOpen = false"
-          class="block font-display text-xl tracking-widest py-2 border-b border-void-gray"
-          :class="route.path.startsWith('/blog') ? 'text-blood' : 'text-offwhite'"
-        >
-          {{ link.label }}
-        </NuxtLink>
-        <a
-          v-else
-          :href="link.path"
-          @click.prevent="navigateToLink(link)"
-          class="block font-display text-xl tracking-widest py-2 border-b border-void-gray"
-          :class="activeSection === link.id && route.path === '/' ? 'text-blood' : 'text-offwhite'"
-        >
-          {{ link.label }}
-        </a>
-      </template>
+      <a
+        v-for="link in navLinks"
+        :key="link.id"
+        :href="link.path"
+        @click.prevent="navigateToLink(link)"
+        class="block font-display text-xl tracking-widest py-2 border-b border-void-gray"
+        :class="activeSection === link.id && route.path === '/' ? 'text-blood' : 'text-offwhite'"
+      >
+        {{ link.label }}
+      </a>
       <a
         :href="bandProfile?.spotify_url || 'https://spotify.com'"
         target="_blank"
