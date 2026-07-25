@@ -14,26 +14,27 @@ export default <Partial<Config>>{
     extend: {
       colors: {
         void: {
-          DEFAULT: '#0a0a0a',
-          charcoal: '#141414',
-          gray: '#1f1f1f',
-          metal: '#2a2a2a',
-          border: '#333333',
+          DEFAULT: '#080808',
+          charcoal: '#121212',
+          gray: '#1c1c1c',
+          metal: '#262626',
+          border: '#2e2e2e',
         },
+        // Rich, elegant crimson burgundy for sophisticated metal aesthetics
         blood: {
-          DEFAULT: '#ff3333',
-          dark: '#b30000',
-          bright: '#ff6666',
+          DEFAULT: '#a80d0d',
+          dark: '#730000',
+          bright: '#cc1414',
         },
         rust: '#8c4b35',
         bone: '#e0d8c3',
-        ash: '#a3a3a3',
-        offwhite: '#f3f4f6',
+        ash: '#9ca3af',
+        silver: '#d1d5db',
+        offwhite: '#f9fafb',
       },
       fontFamily: {
         display: ['"Bebas Neue"', 'sans-serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        // Replaced Space Mono with Cinzel: an elegant, sharp gothic-metal font for tags, dates, and labels
         mono: ['Cinzel', 'Georgia', 'serif'],
         serif: ['Cinzel', 'Georgia', 'serif'],
       },
