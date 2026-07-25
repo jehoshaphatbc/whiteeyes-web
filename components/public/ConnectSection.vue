@@ -20,16 +20,16 @@ defineProps<{
           FOLLOW THE PROPAGANDA. STREAM THE SONIC WARFARE. SUPPORT THE UNDERGROUND.
         </p>
 
-        <!-- 3 Text-Only Platform Cards: Spotify, Instagram, YouTube -->
+        <!-- 3 Unified Red Text-Only Platform Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
           <!-- Spotify -->
           <a
             :href="socialLinks?.spotify_url || '#'"
             target="_blank"
             rel="noopener noreferrer"
-            class="btn-brutal py-8 flex flex-col items-center justify-center gap-2 group transition-all duration-300 border-void-border hover:border-green-500/80 hover:shadow-[0_0_25px_rgba(34,197,94,0.25)] bg-void/50 hover:bg-void"
+            class="btn-brutal py-8 flex flex-col items-center justify-center gap-2 group transition-all duration-300 border-void-border hover:border-blood hover:shadow-[0_0_25px_rgba(255,51,51,0.35)] bg-void/50 hover:bg-blood/10"
           >
-            <span class="font-display text-2xl sm:text-3xl tracking-widest text-white block group-hover:text-green-400 transition-colors">
+            <span class="font-display text-2xl sm:text-3xl tracking-widest text-white block group-hover:text-blood transition-colors">
               SPOTIFY
             </span>
             <span class="font-mono text-xs text-ash group-hover:text-white font-semibold tracking-widest uppercase">
@@ -42,9 +42,9 @@ defineProps<{
             :href="socialLinks?.instagram_url || '#'"
             target="_blank"
             rel="noopener noreferrer"
-            class="btn-brutal py-8 flex flex-col items-center justify-center gap-2 group transition-all duration-300 border-void-border hover:border-pink-500/80 hover:shadow-[0_0_25px_rgba(236,72,153,0.25)] bg-void/50 hover:bg-void"
+            class="btn-brutal py-8 flex flex-col items-center justify-center gap-2 group transition-all duration-300 border-void-border hover:border-blood hover:shadow-[0_0_25px_rgba(255,51,51,0.35)] bg-void/50 hover:bg-blood/10"
           >
-            <span class="font-display text-2xl sm:text-3xl tracking-widest text-white block group-hover:text-pink-400 transition-colors">
+            <span class="font-display text-2xl sm:text-3xl tracking-widest text-white block group-hover:text-blood transition-colors">
               INSTAGRAM
             </span>
             <span class="font-mono text-xs text-ash group-hover:text-white font-semibold tracking-widest uppercase">
@@ -57,9 +57,9 @@ defineProps<{
             :href="socialLinks?.youtube_url || '#'"
             target="_blank"
             rel="noopener noreferrer"
-            class="btn-brutal py-8 flex flex-col items-center justify-center gap-2 group transition-all duration-300 border-void-border hover:border-red-600/80 hover:shadow-[0_0_25px_rgba(239,68,68,0.25)] bg-void/50 hover:bg-void"
+            class="btn-brutal py-8 flex flex-col items-center justify-center gap-2 group transition-all duration-300 border-void-border hover:border-blood hover:shadow-[0_0_25px_rgba(255,51,51,0.35)] bg-void/50 hover:bg-blood/10"
           >
-            <span class="font-display text-2xl sm:text-3xl tracking-widest text-white block group-hover:text-red-500 transition-colors">
+            <span class="font-display text-2xl sm:text-3xl tracking-widest text-white block group-hover:text-blood transition-colors">
               YOUTUBE
             </span>
             <span class="font-mono text-xs text-ash group-hover:text-white font-semibold tracking-widest uppercase">
