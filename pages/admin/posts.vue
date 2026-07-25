@@ -36,25 +36,43 @@ const showDeleteModal = ref(false)
 const showCategoryModal = ref(false)
 const selectedPost = ref<BlogPost | null>(null)
 const activeDropdownId = ref<number | null>(null)
+const activePostForMenu = ref<BlogPost | null>(null)
+const dropdownPos = ref({ top: 0, left: 0 })
 
-// Close dropdown on click outside
+// Close dropdown on click outside or scroll
 const closeDropdown = () => {
   activeDropdownId.value = null
+  activePostForMenu.value = null
 }
 
-const toggleDropdown = (id: number) => {
-  activeDropdownId.value = activeDropdownId.value === id ? null : id
+const toggleDropdown = (postItem: BlogPost, event: MouseEvent) => {
+  if (activeDropdownId.value === postItem.id) {
+    closeDropdown()
+    return
+  }
+  const buttonEl = event.currentTarget as HTMLElement
+  const rect = buttonEl.getBoundingClientRect()
+  
+  // Calculate fixed position: right aligned with button
+  dropdownPos.value = {
+    top: rect.bottom + 6,
+    left: Math.max(16, rect.right - 192),
+  }
+  activePostForMenu.value = postItem
+  activeDropdownId.value = postItem.id
 }
 
 onMounted(() => {
   if (process.client) {
     window.addEventListener('click', closeDropdown)
+    window.addEventListener('scroll', closeDropdown, true)
   }
 })
 
 onUnmounted(() => {
   if (process.client) {
     window.removeEventListener('click', closeDropdown)
+    window.removeEventListener('scroll', closeDropdown, true)
   }
 })
 
@@ -427,71 +445,16 @@ const formatDate = (dateStr?: string) => {
               </td>
 
               <!-- Actions -->
-              <td class="py-4 px-6 text-right relative font-sans">
-                <div class="inline-block text-left relative" @click.stop>
-                  <button
-                    @click.stop="toggleDropdown(p.id)"
-                    class="w-8 h-8 rounded-lg bg-void border border-void-border hover:border-blood text-gray-300 hover:text-white flex items-center justify-center transition-all shadow-sm focus:outline-none"
-                    title="Article Actions"
-                  >
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                  </button>
-
-                  <!-- Three Dots Action Dropdown Popup -->
-                  <div
-                    v-if="activeDropdownId === p.id"
-                    class="absolute right-0 mt-2 w-48 bg-void-charcoal border border-void-border rounded-xl shadow-2xl z-40 py-1 divide-y divide-void-border/50 text-xs font-mono tracking-wider uppercase text-left"
-                  >
-                    <div class="py-1">
-                      <NuxtLink
-                        v-if="p.is_published"
-                        :to="`/blog/${p.slug}`"
-                        target="_blank"
-                        @click="activeDropdownId = null"
-                        class="flex items-center gap-2.5 px-4 py-2.5 text-gray-300 hover:text-white hover:bg-void transition-colors"
-                      >
-                        <svg class="w-3.5 h-3.5 text-blood" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
-                        <span>VIEW ARTICLE ↗</span>
-                      </NuxtLink>
-
-                      <button
-                        @click="openEditModal(p); activeDropdownId = null"
-                        class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-gray-300 hover:text-white hover:bg-void transition-colors"
-                      >
-                        <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                        <span>EDIT POST ✎</span>
-                      </button>
-
-                      <button
-                        @click="togglePublish(p); activeDropdownId = null"
-                        class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-gray-300 hover:text-white hover:bg-void transition-colors"
-                      >
-                        <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                        </svg>
-                        <span>{{ p.is_published ? 'UNPUBLISH (DRAFT)' : 'PUBLISH POST' }}</span>
-                      </button>
-                    </div>
-
-                    <div class="py-1">
-                      <button
-                        @click="openDeleteModal(p); activeDropdownId = null"
-                        class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-950/40 transition-colors"
-                      >
-                        <svg class="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        <span>DELETE POST 🗑</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <td class="py-4 px-6 text-right font-sans">
+                <button
+                  @click.stop="toggleDropdown(p, $event)"
+                  class="w-8 h-8 rounded-lg bg-void border border-void-border hover:border-blood text-gray-300 hover:text-white flex items-center justify-center transition-all shadow-sm focus:outline-none ml-auto"
+                  title="Article Actions"
+                >
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                  </svg>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -889,5 +852,62 @@ const formatDate = (dateStr?: string) => {
       @confirm="handleDeletePost"
       @cancel="showDeleteModal = false"
     />
+
+    <!-- Teleported Floating Action Dropdown Menu -->
+    <Teleport to="body">
+      <div
+        v-if="activeDropdownId !== null && activePostForMenu"
+        class="fixed w-48 bg-void-charcoal border border-void-border rounded-xl shadow-2xl z-[9999] py-1 divide-y divide-void-border/50 text-xs font-mono tracking-wider uppercase text-left"
+        :style="{ top: `${dropdownPos.top}px`, left: `${dropdownPos.left}px` }"
+        @click.stop
+      >
+        <div class="py-1">
+          <NuxtLink
+            v-if="activePostForMenu.is_published"
+            :to="`/blog/${activePostForMenu.slug}`"
+            target="_blank"
+            @click="closeDropdown"
+            class="flex items-center gap-2.5 px-4 py-2.5 text-gray-300 hover:text-white hover:bg-void transition-colors"
+          >
+            <svg class="w-3.5 h-3.5 text-blood" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            <span>VIEW ARTICLE ↗</span>
+          </NuxtLink>
+
+          <button
+            @click="openEditModal(activePostForMenu); closeDropdown()"
+            class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-gray-300 hover:text-white hover:bg-void transition-colors"
+          >
+            <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            <span>EDIT POST ✎</span>
+          </button>
+
+          <button
+            @click="togglePublish(activePostForMenu); closeDropdown()"
+            class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-gray-300 hover:text-white hover:bg-void transition-colors"
+          >
+            <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+            </svg>
+            <span>{{ activePostForMenu.is_published ? 'UNPUBLISH (DRAFT)' : 'PUBLISH POST' }}</span>
+          </button>
+        </div>
+
+        <div class="py-1">
+          <button
+            @click="openDeleteModal(activePostForMenu); closeDropdown()"
+            class="w-full text-left flex items-center gap-2.5 px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-950/40 transition-colors"
+          >
+            <svg class="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            <span>DELETE POST 🗑</span>
+          </button>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
