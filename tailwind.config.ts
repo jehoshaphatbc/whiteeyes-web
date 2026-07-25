@@ -20,7 +20,6 @@ export default <Partial<Config>>{
           metal: '#2a2a2a',
           border: '#333333',
         },
-        // High-contrast vibrant red for extreme readability on dark backgrounds
         blood: {
           DEFAULT: '#ff3333',
           dark: '#b30000',
@@ -34,7 +33,9 @@ export default <Partial<Config>>{
       fontFamily: {
         display: ['"Bebas Neue"', 'sans-serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['"Space Mono"', 'monospace'],
+        // Replaced Space Mono with Cinzel: an elegant, sharp gothic-metal font for tags, dates, and labels
+        mono: ['Cinzel', 'Georgia', 'serif'],
+        serif: ['Cinzel', 'Georgia', 'serif'],
       },
       animation: {
         'grain': 'grain 8s steps(10) infinite',
