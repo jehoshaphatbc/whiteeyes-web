@@ -3,11 +3,17 @@ import { getDb } from './db'
 
 // Fallback Memory Store (used when DATABASE_URL is not set locally)
 export const memoryStore = {
-  adminUser: {
-    id: 1,
-    email: 'admin@whiteeyes.metal',
-    passwordHash: bcrypt.hashSync('Whiteeyes2026!', 10),
-    role: 'admin',
+  adminUsers: [
+    {
+      id: 1,
+      email: 'admin@whiteeyes.metal',
+      passwordHash: bcrypt.hashSync('Whiteeyes2026!', 10),
+      role: 'superadmin',
+      created_at: new Date().toISOString(),
+    },
+  ],
+  get adminUser() {
+    return this.adminUsers[0]
   },
   bandProfile: {
     id: 1,
@@ -271,7 +277,7 @@ export async function ensureDbSchema() {
     const users = await sql`SELECT id FROM admin_users LIMIT 1`
     if (users.length === 0) {
       const hash = bcrypt.hashSync('Whiteeyes2026!', 10)
-      await sql`INSERT INTO admin_users (email, password_hash, role) VALUES ('admin@whiteeyes.metal', ${hash}, 'admin')`
+      await sql`INSERT INTO admin_users (email, password_hash, role) VALUES ('admin@whiteeyes.metal', ${hash}, 'superadmin')`
     }
 
     // Seed Band Profile if missing

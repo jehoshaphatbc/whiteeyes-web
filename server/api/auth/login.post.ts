@@ -18,9 +18,7 @@ export default defineEventHandler(async (event) => {
     const [dbUser] = await sql`SELECT * FROM admin_users WHERE email = ${email}`
     user = dbUser
   } else {
-    if (email === memoryStore.adminUser.email) {
-      user = memoryStore.adminUser
-    }
+    user = memoryStore.adminUsers.find((u: any) => u.email === email) || null
   }
 
   if (!user) {
