@@ -3,23 +3,34 @@ import type { BandProfile } from '~/types/content'
 
 const props = defineProps<{
   bandProfile?: BandProfile
-  activeSection: string
+  activeSection?: string
 }>()
 
+const route = useRoute()
+const router = useRouter()
 const mobileMenuOpen = ref(false)
 
 const navLinks = [
-  { id: 'about', label: 'ABOUT' },
-  { id: 'latest-release', label: 'MUSIC' },
-  { id: 'artwork', label: 'ARTWORK' },
-  { id: 'videos', label: 'VIDEOS' },
-  { id: 'merch', label: 'MERCH' },
-  { id: 'connect', label: 'CONNECT' },
+  { id: 'about', label: 'ABOUT', path: '/#about' },
+  { id: 'latest-release', label: 'MUSIC', path: '/#latest-release' },
+  { id: 'artwork', label: 'ARTWORK', path: '/#artwork' },
+  { id: 'videos', label: 'VIDEOS', path: '/#videos' },
+  { id: 'merch', label: 'MERCH', path: '/#merch' },
+  { id: 'blog', label: 'BLOG', path: '/blog', isPage: true },
+  { id: 'connect', label: 'CONNECT', path: '/#connect' },
 ]
 
-const scrollToSection = (id: string) => {
+const navigateToLink = (link: typeof navLinks[0]) => {
   mobileMenuOpen.value = false
-  const el = document.getElementById(id)
+  if (link.isPage) {
+    router.push('/blog')
+    return
+  }
+  if (route.path !== '/') {
+    router.push(`/#${link.id}`)
+    return
+  }
+  const el = document.getElementById(link.id)
   if (el) {
     el.scrollIntoView({ behavior: 'smooth' })
   }
@@ -29,8 +40,8 @@ const scrollToSection = (id: string) => {
 <template>
   <header class="fixed top-0 left-0 right-0 z-50 bg-void/90 backdrop-blur-md border-b border-void-border/50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <!-- Logo Only (Text title removed) -->
-      <a href="#hero" @click.prevent="scrollToSection('hero')" class="flex items-center group py-2">
+      <!-- Logo -->
+      <NuxtLink to="/" class="flex items-center group py-2">
         <img
           v-if="bandProfile?.logo_url"
           :src="bandProfile.logo_url"
@@ -40,24 +51,37 @@ const scrollToSection = (id: string) => {
         <span v-else class="font-display text-3xl tracking-widest text-offwhite group-hover:text-blood transition-colors">
           {{ bandProfile?.band_name || 'WHITEEYES' }}
         </span>
-      </a>
+      </NuxtLink>
 
       <!-- Desktop Nav -->
-      <nav class="hidden md:flex items-center gap-8 font-display tracking-widest text-sm">
-        <a
-          v-for="link in navLinks"
-          :key="link.id"
-          :href="`#${link.id}`"
-          @click.prevent="scrollToSection(link.id)"
-          class="transition-colors duration-200 py-1 border-b-2"
-          :class="[
-            activeSection === link.id
-              ? 'text-blood border-blood font-bold'
-              : 'text-ash border-transparent hover:text-offwhite'
-          ]"
-        >
-          {{ link.label }}
-        </a>
+      <nav class="hidden md:flex items-center gap-7 font-display tracking-widest text-sm">
+        <template v-for="link in navLinks" :key="link.id">
+          <NuxtLink
+            v-if="link.isPage"
+            to="/blog"
+            class="transition-colors duration-200 py-1 border-b-2"
+            :class="[
+              route.path.startsWith('/blog')
+                ? 'text-blood border-blood font-bold'
+                : 'text-ash border-transparent hover:text-offwhite'
+            ]"
+          >
+            {{ link.label }}
+          </NuxtLink>
+          <a
+            v-else
+            :href="link.path"
+            @click.prevent="navigateToLink(link)"
+            class="transition-colors duration-200 py-1 border-b-2 cursor-pointer"
+            :class="[
+              activeSection === link.id && route.path === '/'
+                ? 'text-blood border-blood font-bold'
+                : 'text-ash border-transparent hover:text-offwhite'
+            ]"
+          >
+            {{ link.label }}
+          </a>
+        </template>
       </nav>
 
       <!-- Listen Now CTA -->
@@ -93,16 +117,26 @@ const scrollToSection = (id: string) => {
       v-if="mobileMenuOpen"
       class="md:hidden bg-void-charcoal border-b border-void-border px-6 py-6 space-y-4"
     >
-      <a
-        v-for="link in navLinks"
-        :key="link.id"
-        :href="`#${link.id}`"
-        @click.prevent="scrollToSection(link.id)"
-        class="block font-display text-xl tracking-widest py-2 border-b border-void-gray"
-        :class="activeSection === link.id ? 'text-blood' : 'text-offwhite'"
-      >
-        {{ link.label }}
-      </a>
+      <template v-for="link in navLinks" :key="link.id">
+        <NuxtLink
+          v-if="link.isPage"
+          to="/blog"
+          @click="mobileMenuOpen = false"
+          class="block font-display text-xl tracking-widest py-2 border-b border-void-gray"
+          :class="route.path.startsWith('/blog') ? 'text-blood' : 'text-offwhite'"
+        >
+          {{ link.label }}
+        </NuxtLink>
+        <a
+          v-else
+          :href="link.path"
+          @click.prevent="navigateToLink(link)"
+          class="block font-display text-xl tracking-widest py-2 border-b border-void-gray"
+          :class="activeSection === link.id && route.path === '/' ? 'text-blood' : 'text-offwhite'"
+        >
+          {{ link.label }}
+        </a>
+      </template>
       <a
         :href="bandProfile?.spotify_url || 'https://spotify.com'"
         target="_blank"

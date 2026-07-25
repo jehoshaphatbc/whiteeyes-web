@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS videos CASCADE;
 DROP TABLE IF EXISTS merch_items CASCADE;
 DROP TABLE IF EXISTS social_links CASCADE;
 DROP TABLE IF EXISTS seo_settings CASCADE;
+DROP TABLE IF EXISTS blog_posts CASCADE;
 DROP TABLE IF EXISTS abouts CASCADE;
 DROP TABLE IF EXISTS band_profiles CASCADE;
 DROP TABLE IF EXISTS admin_users CASCADE;
@@ -124,6 +125,23 @@ CREATE TABLE seo_settings (
     canonical_url TEXT
 );
 
+CREATE TABLE blog_posts (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    excerpt TEXT,
+    content TEXT,
+    cover_image_url TEXT,
+    author VARCHAR(100) DEFAULT 'WHITEEYES',
+    category VARCHAR(100) DEFAULT 'News',
+    meta_title VARCHAR(255),
+    meta_description TEXT,
+    meta_keywords VARCHAR(255),
+    is_published BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- =================================================================
 -- 3. INSERT DEMO SEED DATA
 -- =================================================================
@@ -190,6 +208,11 @@ INSERT INTO social_links (id, instagram_url, spotify_url, youtube_url, facebook_
 INSERT INTO seo_settings (id, meta_title, meta_description, meta_keywords, og_title, og_description, og_image_url, twitter_card_type, canonical_url) VALUES 
 (1, 'WHITEEYES — Extreme Death Metal', 'Official portal of subterranean Extreme Death Metal band WHITEEYES from Jakarta. Stream discography, view artwork, watch live transmissions, and order official merchandise.', 'WHITEEYES, Death Metal, Extreme Metal, Jakarta Death Metal, Underground Metal, Chronicles of Decay', 'WHITEEYES — Extreme Death Metal', 'Official portal of WHITEEYES. Underground Death Metal from Jakarta.', '/favicon.png', 'summary_large_image', 'https://whiteeyes-web.vercel.app');
 
+-- Blog Posts
+INSERT INTO blog_posts (id, title, slug, excerpt, content, cover_image_url, author, category, meta_title, meta_description, meta_keywords, is_published) VALUES
+(1, 'Chronicles of Decay LP Official Release & Tour Manifest', 'chronicles-of-decay-release-and-tour-manifest', 'The subterranean sonic warfare is unleashed. Read the official release statement and upcoming tour locations across Southeast Asia.', 'Forged in the cavernous underground rehearsals of Jakarta, our sophomore full-length album "CHRONICLES OF DECAY" is officially available worldwide.\n\nRecorded on analog tape and engineered to deliver suffocating dissonance, eight monolithic tracks explore bodily decay and metaphysical dissolution.\n\nPhysical merchandise and vinyl pressings are now shipping globally via Iron Tomb Records. Prepare for the upcoming tour transmissions across Indonesia, Malaysia, and Singapore.', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', 'WHITEEYES', 'Announcement', 'Chronicles of Decay LP Release & Tour | WHITEEYES', 'Official release announcement for Chronicles of Decay LP and Southeast Asian tour manifest by WHITEEYES.', 'WHITEEYES, Chronicles of Decay, Death Metal Tour, LP Release', TRUE),
+(2, 'Subterranean Studio Transmissions: Recording Monolith of Filth', 'subterranean-studio-transmissions-recording-monolith-of-filth', 'An exclusive look inside our raw analog studio sessions during the creation of the cavernous EP Monolith of Filth.', 'During the damp mid-monsoon months of 2022, WHITEEYES isolated inside a subterranean rehearsal bunker to capture the suffocating energy of "Monolith of Filth".\n\nRejecting digital quantisation and modern sterile drum replacement, every track was captured live in single takes with vintage valve microphones.\n\nVisual archives and studio photo documentation can be explored in our Artwork Gallery section.', 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop', 'WHITEEYES', 'Studio Report', 'Inside Monolith of Filth Studio Sessions | WHITEEYES', 'Behind the scenes into the analog studio recording sessions of Monolith of Filth EP.', 'WHITEEYES, Studio Report, Monolith of Filth, Recording Death Metal', TRUE);
+
 -- Adjust SERIAL Sequences
 SELECT setval('admin_users_id_seq', (SELECT MAX(id) FROM admin_users));
 SELECT setval('band_profiles_id_seq', (SELECT MAX(id) FROM band_profiles));
@@ -202,3 +225,4 @@ SELECT setval('videos_id_seq', (SELECT MAX(id) FROM videos));
 SELECT setval('merch_items_id_seq', (SELECT MAX(id) FROM merch_items));
 SELECT setval('social_links_id_seq', (SELECT MAX(id) FROM social_links));
 SELECT setval('seo_settings_id_seq', (SELECT MAX(id) FROM seo_settings));
+SELECT setval('blog_posts_id_seq', (SELECT MAX(id) FROM blog_posts));

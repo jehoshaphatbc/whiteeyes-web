@@ -134,3 +134,20 @@ export interface AdminUser {
   created_at?: string
   updated_at?: string
 }
+
+export interface BlogPost {
+  id: number
+  title: string
+  slug: string
+  excerpt: string
+  content: string
+  cover_image_url?: string
+  author: string
+  category: string
+  meta_title?: string
+  meta_description?: string
+  meta_keywords?: string
+  is_published: boolean
+  created_at?: string
+  updated_at?: string
+}

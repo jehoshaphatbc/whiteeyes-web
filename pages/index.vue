@@ -62,6 +62,7 @@ useHead({
 
     <PublicVideosSection
       :videos="pageContent?.videos"
+      :youtube-url="pageContent?.band_profile?.youtube_url || pageContent?.social_links?.youtube_url"
     />
 
     <PublicMerchSection
