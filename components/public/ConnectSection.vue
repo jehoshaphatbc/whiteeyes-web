@@ -10,7 +10,7 @@ defineProps<{
   <section id="connect" class="py-32 bg-void-charcoal border-t border-void-border relative overflow-hidden text-center">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <UiRevealOnScroll>
-        <span class="font-mono text-xs text-blood tracking-widest uppercase">// 07 ENTER THE ABYSS</span>
+        <span class="font-mono text-xs text-blood tracking-widest uppercase">// 08 ENTER THE ABYSS</span>
 
         <h2 class="font-display text-5xl sm:text-7xl md:text-8xl text-white uppercase tracking-tighter my-8 text-glitch">
           {{ socialLinks?.closing_headline || 'JOIN THE ABYSS' }}

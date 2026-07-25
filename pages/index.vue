@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { pageContent, fetchPageContent } = usePageContent()
 
-const sectionIds = ['hero', 'about', 'latest-release', 'discography', 'artwork', 'videos', 'merch', 'connect']
+const sectionIds = ['hero', 'about', 'latest-release', 'discography', 'artwork', 'videos', 'merch', 'blog', 'connect']
 const { activeSection } = useActiveSection(sectionIds)
 
 // Fetch initial SSR payload
@@ -69,6 +69,8 @@ useHead({
       :merch="pageContent?.merch"
       :global-whats-app="pageContent?.social_links?.whatsapp_number"
     />
+
+    <PublicBlogSection />
 
     <PublicConnectSection
       :social-links="pageContent?.social_links"
