@@ -180,42 +180,99 @@ export const memoryStore = {
     {
       id: 1,
       title: 'ANICONISM',
-      subtitle: 'SINGLE 2024',
-      slug: 'aniconism-single-2024',
+      subtitle: 'REPERTOAR "ANICONISM" BERTUTUR DALAM GAUNG PELESTARIAN',
+      slug: 'aniconism',
       cover_image_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop',
       hero_bg_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop',
-      release_date: 'MAY 2024',
-      genre: 'Extreme Death Metal',
-      producer: 'WHITEEYES',
+      release_date: '2024',
+      genre: 'Death Metal',
+      producer: 'Trojan',
       label: 'Iron Tomb Records',
       listen_url: 'https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02',
       video_url: 'https://youtube.com/@whiteeyesmetal',
       press_kit_url: 'https://drive.google.com',
-      intro_headline: "THE ECHOES OF CIVILIZATION'S DECAY.",
-      intro_body: 'Forged in the cavernous rehearsal spaces of Jakarta, our latest single ANICONISM explores the inevitable collapse of anthropocentric arrogance. Engineered with raw valve amplifiers and analog tape saturation.',
-      highlight_title: 'ENVIRONMENTAL DESTINY',
-      highlight_body: 'Exploring the terrifying reality of ecological dissolution and human mortality under catastrophic climate degradation.',
+      intro_headline: 'REPERTOAR "ANICONISM" BERTUTUR DALAM GAUNG PELESTARIAN',
+      intro_body: 'Etalase jiwa untuk kehidupan manusia mendatang banyak tersedia melalui alih dalih kematian. Memberi kesempatan untuk lahir kembali ke dunia supaya mentolerir kehidupan yang lebih baik. Namun, pergeseran umat manusia begitu pesat dengan tumbuhnya metode baru, teknologi tampak bermunculan begitu masif. Sampai hingga merenggut keindahan semesta yang semestinya kita rawat dengan baik.\n\nBahkan bukan hanya semesta saja dirusak melainkan sesama umat manusia pun menjadi target liar dan buasnya. Implementasi buruk dengan reputasi yang sejak dulu tidak baik-baik saja, ruh-ruh yang ada di semesta semakin murka dan akan membuat sebuah kolom rencana yang semestinya sudah dilakukan sejak lama. Inilah yang sedang dilakukan oleh Trojan.\n\nMelalui bentuk visual audio yang bertajuk "Aniconism", unit kuintet death metal asal Bali ini, mengunggah sebuah representatifnya agar semua dalam ruang lingkup semesta ini menjadi lebih rukun lagi dan saling menghargai satu sama lain. Berkolaborasi dengan salah satu seniman tari tradisional, Komang Adi Pranata dari Manuaba Art, merefleksikan peradaban ini agar menjadi lebih beradab lagi daripada sebelumnya.',
+      highlight_title: 'ENVIRONMENTAL DESTINY & ECOLOGICAL PRESERVATION',
+      highlight_body: 'Lagu ini bercerita tentang bahwa sebuah praktik keyakinan yang mengucilkan makhluk Tuhan ini seperti tidak menghormati alam semestanya sendiri. Penyelewengan manusia terhadap aturan yang ditetapkan oleh Tuhan sudah dikatakan prematur sehingga sampai pada merusak makhluk Tuhan itu sendiri dan alam semesta. "Aniconism" ini sebagai jembatan awal untuk merangkum sebuah album penuh dari Trojan yang segera akan dirilisnya dalam waktu mendatang.',
       feature_title: 'THE ANICONIC RITUAL',
-      feature_body: 'Rejecting modern digital sterility, ANICONISM was recorded live in single takes to preserve subterranean resonance and unbridled aggression.',
+      feature_body: 'Menghantarkan karya ini untuk sebar secara masif, ada sedikit perubahan dalam tata suara yang dihasilkan. Album penuh "Archaic Dimension" membawa gaung Death Metal yang kental, meracik ramu sentuhan Djent pada beberapa ritme-ritme lagunya. Namun pada "Aniconism" sedikit berbeda.',
       feature_image_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
       feature_points: ['01 - Destruction', '02 - Rebirth', '03 - Dissolution'],
       legacy_title: 'THE LEGACY',
-      legacy_points: ['Raw Analog Production', 'Suffocating Dissonance', 'Traditional Tremolo'],
+      legacy_points: ['Death Metal Classic', 'High Tempo Tremolo', 'Archaic Dimension Era'],
       current_title: 'ANICONISM NOW',
-      current_points: ['Expanded Dynamics', 'Devastating Down-tuned Riffs', 'Cavernous Echoes'],
-      quote_text: 'UNDERSTANDING THAT EARTH IS NOT OWNED BY HUMANS ALONE... REDUCING HUMAN AMBITION... MAINTAINING EARTH AS A PEACEFUL PLACE TO LIVE.',
-      quote_author: 'ARYS PRIHADI, Vocalist',
-      personnel_body: 'Recorded live at Subterranean Bunker Studios, Jakarta. Mastered for vinyl and high-resolution digital playback.',
+      current_points: ['Low Tuning Resonance', 'Djent Rhythm Riffs', 'Cavernous Low End'],
+      sound_character: 'Karakter tata suaranya masih sama, namun yang berbuat berbeda adalah sedikit lebih low daripada sebelumnya. Dominasi dimensi Djent begitu kental pada lagu ini. Walaupun tidak menghilangkan unsur Death Metalnya, sebuah cerita baru dari tubuh Trojan sedikit menggeser perjalanan mereka yang kental dengan Death Metal.',
+      quote_text: 'Satu pesan moral yang ingin disampaikan dari video musik ini adalah bagaimana kita harus menyadari setiap langkah dan perbuatan di alam (Bumi) ini, yang bukan dimiliki oleh manusia semata saja. Sebagai makhluk yang paling beradab sudah seharusnya meredam hasrat dan ambisi untuk lebih pintar dalam berfikir, selalu menciptakan keindahan, sehingga tetap menjadi tempat tinggal yang damai.',
+      quote_author: 'Agus Purnama, Vocalist',
+      personnel_body: 'Kuintet Death Metal asal Bali.',
       personnel_members: [
-        { name: 'ARYS PRIHADI', role: 'Vocalist' },
-        { name: 'EKO RUSTON', role: 'Guitarist' },
-        { name: 'MICHAEL PRIHADI', role: 'Drums' },
-        { name: 'ARI PRATAMA', role: 'Bass' },
-        { name: 'AGUS FAUZI', role: 'Lead Guitar' },
+        { name: 'Agus Purnama', role: 'Vokal' },
+        { name: 'Reo Rasyidi', role: 'Gitar' },
+        { name: 'Michael Perwira', role: 'Gitar' },
+        { name: 'Adi Pratama', role: 'Bass' },
+        { name: 'Agus Cahyadi', role: 'Drum' },
       ],
+      contact_phone: '085737122722 (Prabu)',
+      social_instagram: '@trojan_death',
+      social_facebook: 'trojandeath',
+      social_youtube: 'Trojan Death Bali',
+      discography_summary: 'SINGLES:\n- Blackness Begins (2011)\n- Imaginarium of Murder (2017)\n- Release The Beast (2020 - Live Session)\n\nALBUMS:\n- Metamorphosis As The Phenomenon (2010)\n- Archaic Dimension (2015)',
+      music_credits: [
+        { label: 'JUDUL LAGU', value: 'Aniconism' },
+        { label: 'EKSEKUTIF PRODUSER', value: 'Trojan' },
+        { label: 'PENULIS', value: 'Trojan' },
+        { label: 'PENCICTA', value: 'Trojan' },
+        { label: 'MUSIK', value: 'Trojan' },
+        { label: 'PRODUSER', value: 'Trojan' },
+        { label: 'MIXING', value: 'Indra Komenk' },
+        { label: 'MASTERING', value: 'Indra Komenk' },
+        { label: 'FOTOGRAFER', value: 'Guzindra' },
+        { label: 'VIDEOGRAFER', value: 'Guzindra' },
+        { label: 'ARTWORKER', value: 'Reo Rasyidi' },
+        { label: 'TALENT MV', value: 'Komang Adi Pranata' },
+      ],
+      lyrics: `In a world of power, where ego reigns pulling the strings.
+Building towers of pride, reaching for the skies,
+Blinded by control, we believe our own lies.
+
+Can we truly fathom the consequence?
+Of playing with life, disregarding our sense?
+
+We alter the genes, manipulate the cells,
+Unleashing a Pandora's Box, no one can tell.
+Creating life in labs, trying to play divine,
+But do we understand the limit and the line?
+
+Nature's laws, they cannot be tamed,
+For every action, there's a price to be paid.
+
+The chaos and destruction!
+
+Mother Earth, she's crying out in pain,
+As we foolishly play this dangerous game.
+
+It's time to reflect on the path we've taken,
+To reassess our powers and awaken.
+
+Respect the earth, and the sky!
+
+We're just fragments in this cosmic play,
+For power and control, as deadly display.
+
+They play with lie!
+Let us remember, we’re part of a whole!
+
+In this world, where power reigns supreme,
+Some humans chase the ultimate dream
+Playing with fire
+They seek control
+Playing god
+They aim to steal the role.`,
       video_embed_url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-      tracklist_info: 'Track 1: Aniconism (05:42)\nTrack 2: Monolith of Filth - Live (04:18)',
-      press_email: 'whiteeyes@gmail.com',
+      tracklist_info: 'Aniconism - Official Single Transmission',
+      press_email: 'trojandeath79@gmail.com',
       is_published: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -500,8 +557,8 @@ export async function ensureDbSchema() {
         cover_image_url TEXT,
         hero_bg_url TEXT,
         release_date VARCHAR(100),
-        genre VARCHAR(100) DEFAULT 'Extreme Death Metal',
-        producer VARCHAR(100) DEFAULT 'WHITEEYES',
+        genre VARCHAR(100) DEFAULT 'Death Metal',
+        producer VARCHAR(100) DEFAULT 'Trojan',
         label VARCHAR(100) DEFAULT 'Iron Tomb Records',
         listen_url TEXT,
         video_url TEXT,
@@ -518,13 +575,21 @@ export async function ensureDbSchema() {
         legacy_points JSONB,
         current_title VARCHAR(255),
         current_points JSONB,
+        sound_character TEXT,
         quote_text TEXT,
         quote_author VARCHAR(255),
         personnel_body TEXT,
         personnel_members JSONB,
+        contact_phone VARCHAR(255),
+        social_instagram VARCHAR(255),
+        social_facebook VARCHAR(255),
+        social_youtube VARCHAR(255),
+        discography_summary TEXT,
+        music_credits JSONB,
+        lyrics TEXT,
         video_embed_url TEXT,
         tracklist_info TEXT,
-        press_email VARCHAR(255) DEFAULT 'whiteeyes@gmail.com',
+        press_email VARCHAR(255) DEFAULT 'trojandeath79@gmail.com',
         meta_title VARCHAR(255),
         meta_description TEXT,
         meta_keywords VARCHAR(255),
@@ -538,8 +603,8 @@ export async function ensureDbSchema() {
     if (prs.length === 0) {
       for (const pr of memoryStore.pressReleases) {
         await sql`
-          INSERT INTO press_releases (title, subtitle, slug, cover_image_url, hero_bg_url, release_date, genre, producer, label, listen_url, video_url, press_kit_url, intro_headline, intro_body, highlight_title, highlight_body, feature_title, feature_body, feature_image_url, feature_points, legacy_title, legacy_points, current_title, current_points, quote_text, quote_author, personnel_body, personnel_members, video_embed_url, tracklist_info, press_email, is_published)
-          VALUES (${pr.title}, ${pr.subtitle}, ${pr.slug}, ${pr.cover_image_url}, ${pr.hero_bg_url}, ${pr.release_date}, ${pr.genre}, ${pr.producer}, ${pr.label}, ${pr.listen_url}, ${pr.video_url}, ${pr.press_kit_url}, ${pr.intro_headline}, ${pr.intro_body}, ${pr.highlight_title}, ${pr.highlight_body}, ${pr.feature_title}, ${pr.feature_body}, ${pr.feature_image_url}, ${JSON.stringify(pr.feature_points)}, ${pr.legacy_title}, ${JSON.stringify(pr.legacy_points)}, ${pr.current_title}, ${JSON.stringify(pr.current_points)}, ${pr.quote_text}, ${pr.quote_author}, ${pr.personnel_body}, ${JSON.stringify(pr.personnel_members)}, ${pr.video_embed_url}, ${pr.tracklist_info}, ${pr.press_email}, ${pr.is_published})
+          INSERT INTO press_releases (title, subtitle, slug, cover_image_url, hero_bg_url, release_date, genre, producer, label, listen_url, video_url, press_kit_url, intro_headline, intro_body, highlight_title, highlight_body, feature_title, feature_body, feature_image_url, feature_points, legacy_title, legacy_points, current_title, current_points, sound_character, quote_text, quote_author, personnel_body, personnel_members, contact_phone, social_instagram, social_facebook, social_youtube, discography_summary, music_credits, lyrics, video_embed_url, tracklist_info, press_email, is_published)
+          VALUES (${pr.title}, ${pr.subtitle}, ${pr.slug}, ${pr.cover_image_url}, ${pr.hero_bg_url}, ${pr.release_date}, ${pr.genre}, ${pr.producer}, ${pr.label}, ${pr.listen_url}, ${pr.video_url}, ${pr.press_kit_url}, ${pr.intro_headline}, ${pr.intro_body}, ${pr.highlight_title}, ${pr.highlight_body}, ${pr.feature_title}, ${pr.feature_body}, ${pr.feature_image_url}, ${JSON.stringify(pr.feature_points)}, ${pr.legacy_title}, ${JSON.stringify(pr.legacy_points)}, ${pr.current_title}, ${JSON.stringify(pr.current_points)}, ${pr.sound_character}, ${pr.quote_text}, ${pr.quote_author}, ${pr.personnel_body}, ${JSON.stringify(pr.personnel_members)}, ${pr.contact_phone}, ${pr.social_instagram}, ${pr.social_facebook}, ${pr.social_youtube}, ${pr.discography_summary}, ${JSON.stringify(pr.music_credits)}, ${pr.lyrics}, ${pr.video_embed_url}, ${pr.tracklist_info}, ${pr.press_email}, ${pr.is_published})
         `
       }
     }

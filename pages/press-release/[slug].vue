@@ -17,13 +17,13 @@ if (error.value || !pr.value) {
 const siteUrl = 'https://whiteeyes-web.vercel.app'
 const canonicalUrl = `${siteUrl}/press-release/${slug.value}`
 const pageTitle = `${pr.value.title} ${pr.value.subtitle ? `— ${pr.value.subtitle}` : ''} | WHITEEYES Press Release`
-const pageDesc = pr.value.intro_headline || pr.value.intro_body || `Official press release statement for ${pr.value.title} by WHITEEYES.`
+const pageDesc = pr.value.intro_headline || pr.value.intro_body || `Official press release statement for ${pr.value.title}.`
 const pageImg = pr.value.cover_image_url || pr.value.hero_bg_url || '/favicon.png'
 
 useSeoMeta({
   title: pageTitle,
   description: pageDesc,
-  keywords: pr.value.meta_keywords || 'WHITEEYES, Death Metal, Press Release, Statement',
+  keywords: pr.value.meta_keywords || 'WHITEEYES, Death Metal, Press Release, ANICONISM',
   ogTitle: pageTitle,
   ogDescription: pageDesc,
   ogImage: pageImg,
@@ -46,283 +46,186 @@ useHead({
     <UiGrainOverlay />
     <PublicTheHeader :band-profile="pageContent?.band_profile" />
 
-    <main class="flex-1 pt-20">
-      <!-- SECTION 1: HERO BANNER -->
-      <section class="relative min-h-[80vh] flex flex-col justify-end pb-16 pt-24 overflow-hidden border-b border-void-border">
-        <!-- Hero Background Image & Overlay -->
-        <div class="absolute inset-0 z-0">
-          <img
-            v-if="pr.hero_bg_url || pr.cover_image_url"
-            :src="pr.hero_bg_url || pr.cover_image_url"
-            :alt="pr.title"
-            class="w-full h-full object-cover filter grayscale contrast-150 brightness-50"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-void via-void/80 to-transparent"></div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full space-y-8">
+    <main class="flex-1 pt-28 pb-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        <!-- Top Back Link -->
+        <div>
           <NuxtLink
             to="/press-release"
-            class="inline-flex items-center gap-2 font-mono text-xs text-ash hover:text-blood uppercase tracking-widest transition-colors group mb-4"
+            class="inline-flex items-center gap-2 font-mono text-xs text-ash hover:text-blood uppercase tracking-widest transition-colors group"
           >
             <span class="group-hover:-translate-x-1 transition-transform">←</span>
             <span>BACK TO ALL PRESS RELEASES</span>
           </NuxtLink>
+        </div>
 
-          <!-- Release Title & Tag -->
-          <div class="space-y-2">
-            <span class="bg-blood text-white text-xs font-mono font-bold uppercase tracking-widest px-3 py-1 rounded inline-block">
-              {{ pr.subtitle || 'RELEASE STATEMENT' }}
-            </span>
-            <h1 class="font-display text-6xl sm:text-8xl md:text-9xl text-white uppercase tracking-tighter leading-none text-glitch">
-              {{ pr.title }}
-            </h1>
+        <!-- MAIN PDF PRESS RELEASE CONTAINER (2-COL LAYOUT) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          <!-- LEFT SIDEBAR COLUMN (Artwork, Jenis Musik, Personil, Kontak, Sosial Media, Diskografi) -->
+          <aside class="lg:col-span-4 bg-void-charcoal border border-void-border rounded-xl p-6 sm:p-8 space-y-8 shadow-2xl">
+            <!-- Cover Image -->
+            <div class="aspect-square bg-black rounded-lg overflow-hidden border border-void-border">
+              <img
+                v-if="pr.cover_image_url || pr.hero_bg_url"
+                :src="pr.cover_image_url || pr.hero_bg_url"
+                :alt="pr.title"
+                class="w-full h-full object-cover filter contrast-125 grayscale hover:grayscale-0 transition-all duration-500"
+              />
+              <div v-else class="w-full h-full flex items-center justify-center font-mono text-xs text-ash">
+                NO COVER ARTWORK
+              </div>
+            </div>
+
+            <!-- JENIS MUSIK -->
+            <div class="space-y-1 border-b border-void-border/60 pb-6">
+              <h3 class="font-display text-lg text-white uppercase tracking-wider">JENIS MUSIK:</h3>
+              <p class="font-mono text-sm text-red-400 font-bold uppercase">{{ pr.genre || 'Death Metal' }}</p>
+            </div>
+
+            <!-- PERSONIL -->
+            <div class="space-y-2 border-b border-void-border/60 pb-6">
+              <h3 class="font-display text-lg text-white uppercase tracking-wider">PERSONIL:</h3>
+              <ul class="space-y-1 font-mono text-xs text-gray-300">
+                <li v-for="(person, idx) in (pr.personnel_members || [])" :key="idx" class="flex items-center justify-between">
+                  <span class="text-white font-medium">{{ person.name }}</span>
+                  <span class="text-ash">({{ person.role }})</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- KONTAK -->
+            <div class="space-y-2 border-b border-void-border/60 pb-6">
+              <h3 class="font-display text-lg text-white uppercase tracking-wider">KONTAK:</h3>
+              <div class="font-mono text-xs text-gray-300 space-y-1">
+                <p v-if="pr.contact_phone" class="text-white font-medium">{{ pr.contact_phone }}</p>
+                <p v-if="pr.press_email" class="text-red-400 font-bold underline">{{ pr.press_email }}</p>
+              </div>
+            </div>
+
+            <!-- SOSIAL MEDIA -->
+            <div v-if="pr.social_instagram || pr.social_facebook || pr.social_youtube" class="space-y-2 border-b border-void-border/60 pb-6">
+              <h3 class="font-display text-lg text-white uppercase tracking-wider">SOSIAL MEDIA:</h3>
+              <div class="font-mono text-xs text-ash space-y-1.5">
+                <p v-if="pr.social_instagram"><strong class="text-white">Instagram:</strong> {{ pr.social_instagram }}</p>
+                <p v-if="pr.social_facebook"><strong class="text-white">Facebook:</strong> {{ pr.social_facebook }}</p>
+                <p v-if="pr.social_youtube"><strong class="text-white">Youtube:</strong> {{ pr.social_youtube }}</p>
+              </div>
+            </div>
+
+            <!-- DISKOGRAFI SUMMARY -->
+            <div v-if="pr.discography_summary" class="space-y-2">
+              <h3 class="font-display text-lg text-white uppercase tracking-wider">DISKOGRAFI:</h3>
+              <pre class="font-mono text-xs text-ash whitespace-pre-wrap leading-relaxed bg-void p-4 rounded border border-void-border/60">{{ pr.discography_summary }}</pre>
+            </div>
+          </aside>
+
+          <!-- RIGHT MAIN NARRATIVE COLUMN -->
+          <div class="lg:col-span-8 space-y-10">
+            <!-- Headline / Title -->
+            <div class="space-y-3">
+              <span class="font-mono text-xs text-blood tracking-widest uppercase">// OFFICIAL PRESS RELEASE</span>
+              <h1 class="font-display text-4xl sm:text-6xl text-white uppercase tracking-tight leading-tight">
+                {{ pr.subtitle || pr.title }}
+              </h1>
+            </div>
+
+            <!-- Main Narrative Body Paragraphs -->
+            <div class="prose prose-invert max-w-none font-sans text-gray-300 text-base sm:text-lg leading-relaxed whitespace-pre-line space-y-6">
+              {{ pr.intro_body }}
+            </div>
+
+            <!-- Sound Character & Musical Direction -->
+            <div v-if="pr.sound_character" class="bg-void-charcoal border border-void-border rounded-xl p-8 space-y-4">
+              <span class="font-mono text-xs text-blood tracking-widest uppercase">// TATA SUARA & DIRECTION</span>
+              <h3 class="font-display text-2xl text-white uppercase">TATA SUARA & CHARACTER</h3>
+              <p class="font-sans text-ash text-base leading-relaxed">
+                {{ pr.sound_character }}
+              </p>
+            </div>
+
+            <!-- Featured Quote Callout Block -->
+            <blockquote v-if="pr.quote_text" class="bg-gradient-to-r from-red-950/40 via-void-charcoal to-void-charcoal border-l-4 border-blood p-8 rounded-r-xl space-y-4">
+              <p class="font-display text-2xl sm:text-3xl text-white uppercase tracking-wide leading-snug">
+                "{{ pr.quote_text }}"
+              </p>
+              <cite v-if="pr.quote_author" class="font-mono text-xs text-ash uppercase tracking-widest block not-italic">
+                — {{ pr.quote_author }}
+              </cite>
+            </blockquote>
+
+            <!-- Environmental Destiny Highlight Box -->
+            <div v-if="pr.highlight_title || pr.highlight_body" class="bg-void border border-void-border p-6 rounded-xl space-y-2">
+              <h4 class="font-display text-xl text-white uppercase">{{ pr.highlight_title || 'ENVIRONMENTAL DESTINY' }}</h4>
+              <p class="font-sans text-sm text-ash leading-relaxed">{{ pr.highlight_body }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FULL-WIDTH SECTION: MUSIC CREDIT & CREATIVE (PDF PAGE 4) -->
+        <section v-if="pr.music_credits && pr.music_credits.length" class="bg-void-charcoal border border-void-border rounded-xl p-8 sm:p-12 space-y-8 shadow-2xl">
+          <div class="text-center max-w-2xl mx-auto space-y-2 border-b border-void-border pb-6">
+            <span class="font-mono text-xs text-blood tracking-widest uppercase">// PRODUCTION & CREATIVE TEAM</span>
+            <h2 class="font-display text-4xl sm:text-5xl text-white uppercase tracking-wider">
+              MUSIC CREDIT & CREATIVE
+            </h2>
           </div>
 
-          <!-- Metadata Bar -->
-          <div class="bg-void-charcoal/90 backdrop-blur-md border border-void-border rounded-xl p-4 sm:p-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
-            <div>
-              <span class="text-ash block uppercase text-[10px]">RELEASE DATE</span>
-              <strong class="text-white text-sm uppercase">{{ pr.release_date || 'MAY 2024' }}</strong>
-            </div>
-            <div>
-              <span class="text-ash block uppercase text-[10px]">GENRE</span>
-              <strong class="text-red-400 text-sm uppercase">{{ pr.genre || 'Extreme Death Metal' }}</strong>
-            </div>
-            <div>
-              <span class="text-ash block uppercase text-[10px]">PRODUCER</span>
-              <strong class="text-white text-sm uppercase">{{ pr.producer || 'WHITEEYES' }}</strong>
-            </div>
-            <div>
-              <span class="text-ash block uppercase text-[10px]">LABEL</span>
-              <strong class="text-white text-sm uppercase">{{ pr.label || 'Iron Tomb Records' }}</strong>
+          <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs sm:text-sm">
+            <div
+              v-for="(credit, idx) in pr.music_credits"
+              :key="idx"
+              class="bg-void border border-void-border/80 p-4 rounded-lg flex items-center justify-between"
+            >
+              <span class="font-bold text-gray-400 uppercase tracking-wider">{{ credit.label }}</span>
+              <span class="text-red-400 font-bold uppercase tracking-wide text-right">{{ credit.value }}</span>
             </div>
           </div>
+        </section>
 
-          <!-- Hero Action CTAs -->
-          <div class="flex flex-wrap items-center gap-4 pt-2">
+        <!-- FULL-WIDTH SECTION: SONG LYRICS (PDF PAGES 5 & 6) -->
+        <section v-if="pr.lyrics" class="bg-void border border-void-border rounded-xl p-8 sm:p-16 text-center space-y-8 shadow-2xl relative overflow-hidden">
+          <div class="max-w-2xl mx-auto space-y-3">
+            <span class="font-mono text-xs text-blood tracking-widest uppercase">// SONG LYRICS TRANSMISSION</span>
+            <h2 class="font-display text-4xl sm:text-6xl text-white uppercase tracking-wider">
+              LIRIK "{{ pr.title }}"
+            </h2>
+          </div>
+
+          <div class="max-w-2xl mx-auto font-mono text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line tracking-wide space-y-4">
+            {{ pr.lyrics }}
+          </div>
+
+          <div class="pt-8 border-t border-void-border text-center">
+            <p class="font-mono text-xs text-blood tracking-widest uppercase font-bold">
+              Keep eyes and ears on it, Our Virus Still Deadly...!!!
+            </p>
+          </div>
+        </section>
+
+        <!-- BOTTOM ACTION BAR -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-8 border-t border-void-border">
+          <NuxtLink
+            to="/press-release"
+            class="btn-brutal text-xs py-3 px-6 uppercase tracking-wider"
+          >
+            ← ALL PRESS RELEASES
+          </NuxtLink>
+
+          <div class="flex items-center gap-3">
             <a
               v-if="pr.listen_url"
               :href="pr.listen_url"
               target="_blank"
               rel="noopener noreferrer"
-              class="btn-brutal-primary text-xs py-3.5 px-6 uppercase tracking-wider"
+              class="btn-brutal-primary text-xs py-3 px-6 uppercase tracking-wider"
             >
               LISTEN NOW ↗
             </a>
-            <a
-              v-if="pr.video_url"
-              :href="pr.video_url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-brutal text-xs py-3.5 px-6 uppercase tracking-wider"
-            >
-              WATCH VIDEO ↗
-            </a>
-            <a
-              v-if="pr.press_kit_url"
-              :href="pr.press_kit_url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-brutal text-xs py-3.5 px-6 uppercase tracking-wider text-gray-300 hover:text-white"
-            >
-              DOWNLOAD PRESS KIT 📥
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 2: INTRO STATEMENT -->
-      <section class="py-24 bg-void border-b border-void-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-            <!-- Statement Left Body -->
-            <div class="lg:col-span-2 space-y-6">
-              <h2 class="font-display text-4xl sm:text-6xl text-white uppercase tracking-tight leading-tight">
-                {{ pr.intro_headline || "THE ECHOES OF CIVILIZATION'S DECAY." }}
-              </h2>
-              <p class="font-sans text-gray-300 text-lg leading-relaxed whitespace-pre-line">
-                {{ pr.intro_body || 'Forged in the cavernous rehearsal spaces of Jakarta, our latest release explores the inevitable collapse of anthropocentric arrogance.' }}
-              </p>
-            </div>
-
-            <!-- Highlight Box Right -->
-            <div v-if="pr.highlight_title || pr.highlight_body" class="bg-void-charcoal border border-void-border rounded-xl p-8 space-y-3 relative overflow-hidden">
-              <span class="font-mono text-[10px] text-blood tracking-widest uppercase">// HIGHLIGHT MANIFESTO</span>
-              <h3 class="font-display text-2xl text-white uppercase">
-                {{ pr.highlight_title || 'ENVIRONMENTAL DESTINY' }}
-              </h3>
-              <p class="font-sans text-ash text-sm leading-relaxed">
-                {{ pr.highlight_body }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 3: RITUAL FEATURE SECTION -->
-      <section v-if="pr.feature_title || pr.feature_body" class="py-24 bg-void-charcoal border-b border-void-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <!-- Feature Image -->
-            <div class="bg-void border border-void-border rounded-xl overflow-hidden shadow-2xl">
-              <img
-                :src="pr.feature_image_url || pr.cover_image_url || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop'"
-                :alt="pr.feature_title || 'Ritual Feature'"
-                class="w-full max-h-[450px] object-cover filter contrast-125 grayscale hover:grayscale-0 transition-all duration-500"
-              />
-            </div>
-
-            <!-- Feature Text & Points -->
-            <div class="space-y-6">
-              <span class="font-mono text-xs text-blood tracking-widest uppercase">// CONCEPT & PROCESS</span>
-              <h2 class="font-display text-4xl sm:text-5xl text-white uppercase tracking-wider">
-                {{ pr.feature_title || 'THE ANICONIC RITUAL' }}
-              </h2>
-              <p class="font-sans text-gray-300 text-base leading-relaxed">
-                {{ pr.feature_body }}
-              </p>
-
-              <!-- Points List -->
-              <div v-if="pr.feature_points && pr.feature_points.length" class="space-y-2 pt-4 font-mono text-xs text-ash">
-                <div v-for="(point, idx) in pr.feature_points" :key="idx" class="flex items-center gap-3 bg-void p-3 rounded border border-void-border">
-                  <span class="text-blood font-bold">✓</span>
-                  <span class="text-white uppercase">{{ point }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 4: MUSIC DIRECTION COMPARISON -->
-      <section v-if="pr.legacy_points || pr.current_points" class="py-24 bg-void border-b border-void-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div class="text-center max-w-2xl mx-auto space-y-2">
-            <span class="font-mono text-xs text-blood tracking-widest uppercase">// SONIC EVOLUTION</span>
-            <h2 class="font-display text-4xl sm:text-5xl text-white uppercase">MUSIC DIRECTION</h2>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Legacy -->
-            <div class="bg-void-charcoal border border-void-border p-8 rounded-xl space-y-4">
-              <div class="flex items-center justify-between border-b border-void-border pb-3">
-                <h3 class="font-display text-2xl text-gray-400 uppercase">{{ pr.legacy_title || 'THE LEGACY' }}</h3>
-                <span class="font-mono text-xs text-gray-500 uppercase">PREVIOUS</span>
-              </div>
-              <ul class="space-y-3 font-mono text-xs text-ash">
-                <li v-for="(point, idx) in pr.legacy_points" :key="idx" class="flex items-center gap-2">
-                  <span class="text-gray-600">•</span>
-                  <span>{{ point }}</span>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Current Now -->
-            <div class="bg-void-charcoal border border-blood/60 p-8 rounded-xl space-y-4 shadow-[0_0_20px_rgba(255,51,51,0.15)]">
-              <div class="flex items-center justify-between border-b border-void-border pb-3">
-                <h3 class="font-display text-2xl text-white uppercase">{{ pr.current_title || 'ANICONISM NOW' }}</h3>
-                <span class="font-mono text-xs text-blood font-bold uppercase">PRESENT</span>
-              </div>
-              <ul class="space-y-3 font-mono text-xs text-gray-200">
-                <li v-for="(point, idx) in pr.current_points" :key="idx" class="flex items-center gap-2">
-                  <span class="text-blood font-bold">✓</span>
-                  <span>{{ point }}</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 5: QUOTE CALLOUT BLOCK -->
-      <section v-if="pr.quote_text" class="py-24 bg-void-charcoal border-b border-void-border text-center relative overflow-hidden">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 relative z-10">
-          <span class="font-display text-8xl text-blood/40 block leading-none select-none">”</span>
-          <blockquote class="font-display text-3xl sm:text-5xl text-white uppercase tracking-wide leading-tight">
-            "{{ pr.quote_text }}"
-          </blockquote>
-          <cite v-if="pr.quote_author" class="font-mono text-xs text-ash uppercase tracking-widest block not-italic pt-4">
-            — {{ pr.quote_author }}
-          </cite>
-        </div>
-      </section>
-
-      <!-- SECTION 6: BAND PERSONNEL GRID ("THE VIRUS") -->
-      <section class="py-24 bg-void border-b border-void-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-            <div class="space-y-4">
-              <span class="font-mono text-xs text-blood tracking-widest uppercase">// PERSONNEL & WARRIORS</span>
-              <h2 class="font-display text-4xl sm:text-5xl text-white uppercase">THE VIRUS</h2>
-              <p class="font-sans text-ash text-sm leading-relaxed">
-                {{ pr.personnel_body || 'The subterranean lineup responsible for executing sonic warfare and analog recording session transmissions.' }}
-              </p>
-            </div>
-
-            <!-- Members List Grid -->
-            <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
-              <div
-                v-for="(member, idx) in (pr.personnel_members || [
-                  { name: 'ARYS PRIHADI', role: 'Vocalist' },
-                  { name: 'EKO RUSTON', role: 'Guitarist' },
-                  { name: 'MICHAEL PRIHADI', role: 'Drums' },
-                  { name: 'ARI PRATAMA', role: 'Bass' },
-                  { name: 'AGUS FAUZI', role: 'Lead Guitar' }
-                ])"
-                :key="idx"
-                class="bg-void-charcoal border border-void-border p-4 rounded-lg flex items-center justify-between"
-              >
-                <span class="font-bold text-white uppercase">{{ member.name }}</span>
-                <span class="text-ash text-[10px] uppercase">{{ member.role }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 7: CHRONICLES DISCOGRAPHY showcase -->
-      <section v-if="pageContent?.discography" class="py-24 bg-void-charcoal border-b border-void-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          <div class="flex items-center justify-between border-b border-void-border pb-4">
-            <div>
-              <span class="font-mono text-xs text-blood tracking-widest uppercase">// DISCOGRAPHY ARCHIVE</span>
-              <h2 class="font-display text-4xl text-white uppercase">CHRONICLES</h2>
-            </div>
-            <NuxtLink to="/#discography" class="font-mono text-xs text-ash hover:text-white uppercase">EXPLORE ALL ↗</NuxtLink>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
-            <div v-for="rel in pageContent.discography.slice(0, 4)" :key="rel.id" class="bg-void border border-void-border rounded-lg overflow-hidden group">
-              <div class="aspect-square bg-black overflow-hidden">
-                <img :src="rel.cover_art_url" :alt="rel.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0" />
-              </div>
-              <div class="p-3 font-mono text-xs">
-                <h4 class="font-bold text-white line-clamp-1 uppercase">{{ rel.title }}</h4>
-                <span class="text-[10px] text-ash uppercase">{{ rel.release_type }} • {{ rel.release_date }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 8 & 9: CONTACT & FOOTER STATEMENT -->
-      <section class="py-24 bg-void text-center space-y-12">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <span class="font-mono text-xs text-blood tracking-widest uppercase">// MEDIA & PRESS INQUIRIES</span>
-          <h2 class="font-display text-4xl sm:text-6xl text-white uppercase">CONTACT PRESS OFFICERS</h2>
-          <div class="bg-void-charcoal border border-void-border p-6 rounded-xl inline-block font-mono text-sm">
-            <span class="text-ash block text-xs uppercase mb-1">FOR BOOKING / PRESS KIT / INTERVIEWS</span>
-            <strong class="text-blood text-lg tracking-widest">{{ pr.press_email || 'WHITEEYES@GMAIL.COM' }}</strong>
           </div>
         </div>
 
-        <div class="border-t border-void-border pt-12">
-          <h3 class="font-display text-5xl sm:text-7xl text-white uppercase tracking-tighter text-glitch">
-            OUR VIRUS STILL DEADLY...!!!
-          </h3>
-        </div>
-      </section>
+      </div>
     </main>
 
     <PublicTheFooter :band-profile="pageContent?.band_profile" />
