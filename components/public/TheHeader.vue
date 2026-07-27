@@ -17,6 +17,7 @@ const navLinks = [
   { id: 'videos', label: 'VIDEOS', path: '/#videos' },
   { id: 'merch', label: 'MERCH', path: '/#merch' },
   { id: 'blog', label: 'BLOG', path: '/#blog' },
+  { id: 'press-release', label: 'PRESS RELEASE', path: '/#press-release' },
   { id: 'connect', label: 'CONNECT', path: '/#connect' },
 ]
 

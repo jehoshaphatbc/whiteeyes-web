@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { pageContent, fetchPageContent } = usePageContent()
 
-const sectionIds = ['hero', 'about', 'latest-release', 'discography', 'artwork', 'videos', 'merch', 'blog', 'connect']
+const sectionIds = ['hero', 'about', 'latest-release', 'discography', 'artwork', 'videos', 'merch', 'blog', 'press-release', 'connect']
 const { activeSection } = useActiveSection(sectionIds)
 
 // Fetch initial SSR payload
@@ -71,6 +71,8 @@ useHead({
     />
 
     <PublicBlogSection />
+
+    <PublicPressReleaseSection />
 
     <PublicConnectSection
       :social-links="pageContent?.social_links"

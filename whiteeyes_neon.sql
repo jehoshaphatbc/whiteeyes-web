@@ -227,6 +227,51 @@ INSERT INTO blog_categories (id, name, slug) VALUES
 (3, 'Tour News', 'tour-news'),
 (4, 'Merchandise', 'merchandise');
 
+-- Press Releases
+CREATE TABLE press_releases (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    subtitle VARCHAR(255),
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    cover_image_url TEXT,
+    hero_bg_url TEXT,
+    release_date VARCHAR(100),
+    genre VARCHAR(100) DEFAULT 'Extreme Death Metal',
+    producer VARCHAR(100) DEFAULT 'WHITEEYES',
+    label VARCHAR(100) DEFAULT 'Iron Tomb Records',
+    listen_url TEXT,
+    video_url TEXT,
+    press_kit_url TEXT,
+    intro_headline TEXT,
+    intro_body TEXT,
+    highlight_title VARCHAR(255),
+    highlight_body TEXT,
+    feature_title VARCHAR(255),
+    feature_body TEXT,
+    feature_image_url TEXT,
+    feature_points JSONB,
+    legacy_title VARCHAR(255),
+    legacy_points JSONB,
+    current_title VARCHAR(255),
+    current_points JSONB,
+    quote_text TEXT,
+    quote_author VARCHAR(255),
+    personnel_body TEXT,
+    personnel_members JSONB,
+    video_embed_url TEXT,
+    tracklist_info TEXT,
+    press_email VARCHAR(255) DEFAULT 'whiteeyes@gmail.com',
+    meta_title VARCHAR(255),
+    meta_description TEXT,
+    meta_keywords VARCHAR(255),
+    is_published BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO press_releases (id, title, subtitle, slug, cover_image_url, hero_bg_url, release_date, genre, producer, label, listen_url, video_url, press_kit_url, intro_headline, intro_body, highlight_title, highlight_body, feature_title, feature_body, feature_image_url, feature_points, legacy_title, legacy_points, current_title, current_points, quote_text, quote_author, personnel_body, personnel_members, video_embed_url, tracklist_info, press_email, is_published) VALUES
+(1, 'ANICONISM', 'SINGLE 2024', 'aniconism-single-2024', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop', 'MAY 2024', 'Extreme Death Metal', 'WHITEEYES', 'Iron Tomb Records', 'https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02', 'https://youtube.com/@whiteeyesmetal', 'https://drive.google.com', 'THE ECHOES OF CIVILIZATION''S DECAY.', 'Forged in the cavernous rehearsal spaces of Jakarta, our latest single ANICONISM explores the inevitable collapse of anthropocentric arrogance. Engineered with raw valve amplifiers and analog tape saturation.', 'ENVIRONMENTAL DESTINY', 'Exploring the terrifying reality of ecological dissolution and human mortality under catastrophic climate degradation.', 'THE ANICONIC RITUAL', 'Rejecting modern digital sterility, ANICONISM was recorded live in single takes to preserve subterranean resonance and unbridled aggression.', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop', '["01 - Destruction", "02 - Rebirth", "03 - Dissolution"]', 'THE LEGACY', '["Raw Analog Production", "Suffocating Dissonance", "Traditional Tremolo"]', 'ANICONISM NOW', '["Expanded Dynamics", "Devastating Down-tuned Riffs", "Cavernous Echoes"]', 'UNDERSTANDING THAT EARTH IS NOT OWNED BY HUMANS ALONE... REDUCING HUMAN AMBITION... MAINTAINING EARTH AS A PEACEFUL PLACE TO LIVE.', 'ARYS PRIHADI, Vocalist', 'Recorded live at Subterranean Bunker Studios, Jakarta. Mastered for vinyl and high-resolution digital playback.', '[{"name": "ARYS PRIHADI", "role": "Vocalist"}, {"name": "EKO RUSTON", "role": "Guitarist"}, {"name": "MICHAEL PRIHADI", "role": "Drums"}, {"name": "ARI PRATAMA", "role": "Bass"}, {"name": "AGUS FAUZI", "role": "Lead Guitar"}]', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Track 1: Aniconism (05:42)\nTrack 2: Monolith of Filth - Live (04:18)', 'whiteeyes@gmail.com', TRUE);
+
 -- Adjust SERIAL Sequences
 SELECT setval('admin_users_id_seq', (SELECT MAX(id) FROM admin_users));
 SELECT setval('band_profiles_id_seq', (SELECT MAX(id) FROM band_profiles));
@@ -241,3 +286,4 @@ SELECT setval('social_links_id_seq', (SELECT MAX(id) FROM social_links));
 SELECT setval('seo_settings_id_seq', (SELECT MAX(id) FROM seo_settings));
 SELECT setval('blog_posts_id_seq', (SELECT MAX(id) FROM blog_posts));
 SELECT setval('blog_categories_id_seq', (SELECT MAX(id) FROM blog_categories));
+SELECT setval('press_releases_id_seq', (SELECT MAX(id) FROM press_releases));
