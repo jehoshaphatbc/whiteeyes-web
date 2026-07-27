@@ -598,13 +598,26 @@ export async function ensureDbSchema() {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `
+    // Ensure all columns exist on press_releases table
+    await sql`
+      ALTER TABLE press_releases 
+        ADD COLUMN IF NOT EXISTS sound_character TEXT,
+        ADD COLUMN IF NOT EXISTS contact_phone VARCHAR(255),
+        ADD COLUMN IF NOT EXISTS social_instagram VARCHAR(255),
+        ADD COLUMN IF NOT EXISTS social_facebook VARCHAR(255),
+        ADD COLUMN IF NOT EXISTS social_youtube VARCHAR(255),
+        ADD COLUMN IF NOT EXISTS discography_summary TEXT,
+        ADD COLUMN IF NOT EXISTS music_credits JSONB,
+        ADD COLUMN IF NOT EXISTS lyrics TEXT;
+    `
+
     // Seed Press Releases if missing
     const prs = await sql`SELECT id FROM press_releases LIMIT 1`
     if (prs.length === 0) {
       for (const pr of memoryStore.pressReleases) {
         await sql`
           INSERT INTO press_releases (title, subtitle, slug, cover_image_url, hero_bg_url, release_date, genre, producer, label, listen_url, video_url, press_kit_url, intro_headline, intro_body, highlight_title, highlight_body, feature_title, feature_body, feature_image_url, feature_points, legacy_title, legacy_points, current_title, current_points, sound_character, quote_text, quote_author, personnel_body, personnel_members, contact_phone, social_instagram, social_facebook, social_youtube, discography_summary, music_credits, lyrics, video_embed_url, tracklist_info, press_email, is_published)
-          VALUES (${pr.title}, ${pr.subtitle}, ${pr.slug}, ${pr.cover_image_url}, ${pr.hero_bg_url}, ${pr.release_date}, ${pr.genre}, ${pr.producer}, ${pr.label}, ${pr.listen_url}, ${pr.video_url}, ${pr.press_kit_url}, ${pr.intro_headline}, ${pr.intro_body}, ${pr.highlight_title}, ${pr.highlight_body}, ${pr.feature_title}, ${pr.feature_body}, ${pr.feature_image_url}, ${JSON.stringify(pr.feature_points)}, ${pr.legacy_title}, ${JSON.stringify(pr.legacy_points)}, ${pr.current_title}, ${JSON.stringify(pr.current_points)}, ${pr.sound_character}, ${pr.quote_text}, ${pr.quote_author}, ${pr.personnel_body}, ${JSON.stringify(pr.personnel_members)}, ${pr.contact_phone}, ${pr.social_instagram}, ${pr.social_facebook}, ${pr.social_youtube}, ${pr.discography_summary}, ${JSON.stringify(pr.music_credits)}, ${pr.lyrics}, ${pr.video_embed_url}, ${pr.tracklist_info}, ${pr.press_email}, ${pr.is_published})
+          VALUES (${pr.title}, ${pr.subtitle}, ${pr.slug}, ${pr.cover_image_url}, ${pr.hero_bg_url}, ${pr.release_date}, ${pr.genre}, ${pr.producer}, ${pr.label}, ${pr.listen_url}, ${pr.video_url}, ${pr.press_kit_url}, ${pr.intro_headline}, ${pr.intro_body}, ${pr.highlight_title}, ${pr.highlight_body}, ${pr.feature_title}, ${pr.feature_body}, ${pr.feature_image_url}, ${sql.json(pr.feature_points || [])}, ${pr.legacy_title}, ${sql.json(pr.legacy_points || [])}, ${pr.current_title}, ${sql.json(pr.current_points || [])}, ${pr.sound_character}, ${pr.quote_text}, ${pr.quote_author}, ${pr.personnel_body}, ${sql.json(pr.personnel_members || [])}, ${pr.contact_phone}, ${pr.social_instagram}, ${pr.social_facebook}, ${pr.social_youtube}, ${pr.discography_summary}, ${sql.json(pr.music_credits || [])}, ${pr.lyrics}, ${pr.video_embed_url}, ${pr.tracklist_info}, ${pr.press_email}, ${pr.is_published})
         `
       }
     }

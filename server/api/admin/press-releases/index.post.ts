@@ -1,5 +1,5 @@
 import { getDb } from '../../../database/db'
-import { memoryStore } from '../../../database/schema'
+import { memoryStore, ensureDbSchema } from '../../../database/schema'
 
 function slugify(text: string): string {
   return text
@@ -57,6 +57,8 @@ export default defineEventHandler(async (event) => {
   const sql = getDb()
 
   if (sql) {
+    await ensureDbSchema()
+
     const [existing] = await sql`SELECT id FROM press_releases WHERE slug = ${cleanSlug}`
     if (existing) {
       throw createError({ statusCode: 400, statusMessage: 'A press release with this slug already exists' })
