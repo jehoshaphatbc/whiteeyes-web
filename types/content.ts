@@ -157,6 +157,11 @@ export interface PressReleasePersonnel {
   role: string
 }
 
+export interface PressReleaseCredit {
+  label: string
+  value: string
+}
+
 export interface PressRelease {
   id: number
   title: string
@@ -184,11 +189,12 @@ export interface PressRelease {
   feature_image_url?: string
   feature_points?: string[]
 
-  // Music Direction Comparison
+  // Music Direction & Sound Character
   legacy_title?: string
   legacy_points?: string[]
   current_title?: string
   current_points?: string[]
+  sound_character?: string
 
   // Quote Callout
   quote_text?: string
@@ -200,8 +206,17 @@ export interface PressRelease {
   video_embed_url?: string
   tracklist_info?: string
 
-  // Press Contact
+  // Press Contact & Socials
   press_email?: string
+  contact_phone?: string
+  social_instagram?: string
+  social_facebook?: string
+  social_youtube?: string
+  discography_summary?: string
+
+  // Music Credits & Lyrics
+  music_credits?: PressReleaseCredit[]
+  lyrics?: string
   
   // Status & SEO
   meta_title?: string
@@ -211,4 +226,5 @@ export interface PressRelease {
   created_at?: string
   updated_at?: string
 }
+
 

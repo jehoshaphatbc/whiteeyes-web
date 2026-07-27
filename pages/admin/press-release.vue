@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PressRelease, PressReleasePersonnel } from '~/types/content'
+import type { PressRelease, PressReleasePersonnel, PressReleaseCredit } from '~/types/content'
 
 definePageMeta({
   layout: 'admin',
@@ -8,7 +8,7 @@ definePageMeta({
 const pressReleases = ref<PressRelease[]>([])
 const loading = ref(true)
 const searchQuery = ref('')
-const activeTab = ref<'hero' | 'intro' | 'feature' | 'music' | 'quote' | 'personnel' | 'seo'>('hero')
+const activeTab = ref<'hero' | 'intro' | 'feature' | 'music' | 'credits' | 'lyrics'>('hero')
 
 const toast = ref({
   show: false,
@@ -64,7 +64,21 @@ onUnmounted(() => {
   }
 })
 
-// Form State template generator
+const defaultMusicCredits = [
+  { label: 'JUDUL LAGU', value: 'Aniconism' },
+  { label: 'EKSEKUTIF PRODUSER', value: 'Trojan' },
+  { label: 'PENULIS', value: 'Trojan' },
+  { label: 'PENCICTA', value: 'Trojan' },
+  { label: 'MUSIK', value: 'Trojan' },
+  { label: 'PRODUSER', value: 'Trojan' },
+  { label: 'MIXING', value: 'Indra Komenk' },
+  { label: 'MASTERING', value: 'Indra Komenk' },
+  { label: 'FOTOGRAFER', value: 'Guzindra' },
+  { label: 'VIDEOGRAFER', value: 'Guzindra' },
+  { label: 'ARTWORKER', value: 'Reo Rasyidi' },
+  { label: 'TALENT MV', value: 'Komang Adi Pranata' },
+]
+
 const createFormState = () => ({
   id: 0,
   title: '',
@@ -72,9 +86,9 @@ const createFormState = () => ({
   slug: '',
   cover_image_url: '',
   hero_bg_url: '',
-  release_date: 'MAY 2024',
-  genre: 'Extreme Death Metal',
-  producer: 'WHITEEYES',
+  release_date: '2024',
+  genre: 'Death Metal',
+  producer: 'Trojan',
   label: 'Iron Tomb Records',
   listen_url: '',
   video_url: '',
@@ -91,13 +105,21 @@ const createFormState = () => ({
   legacy_points_text: '',
   current_title: 'ANICONISM NOW',
   current_points_text: '',
+  sound_character: '',
   quote_text: '',
   quote_author: '',
   personnel_body: '',
-  personnel_text: '',
+  personnel_text: 'Agus Purnama - Vokal\nReo Rasyidi - Gitar\nMichael Perwira - Gitar\nAdi Pratama - Bass\nAgus Cahyadi - Drum',
+  contact_phone: '085737122722 (Prabu)',
+  social_instagram: '@trojan_death',
+  social_facebook: 'trojandeath',
+  social_youtube: 'Trojan Death Bali',
+  discography_summary: 'SINGLES:\n- Blackness Begins (2011)\n- Imaginarium of Murder (2017)\n- Release The Beast (2020 - Live Session)\n\nALBUMS:\n- Metamorphosis As The Phenomenon (2010)\n- Archaic Dimension (2015)',
+  credits_text: defaultMusicCredits.map((c) => `${c.label}: ${c.value}`).join('\n'),
+  lyrics: '',
   video_embed_url: '',
   tracklist_info: '',
-  press_email: 'whiteeyes@gmail.com',
+  press_email: 'trojandeath79@gmail.com',
   meta_title: '',
   meta_description: '',
   meta_keywords: '',
@@ -135,6 +157,15 @@ const openCreateModal = () => {
   showCreateModal.value = true
 }
 
+const parseCreditsText = (text: string): PressReleaseCredit[] => {
+  return text.split('\n').filter((s) => s.trim()).map((line) => {
+    const parts = line.split(':')
+    const label = parts[0]?.trim() || 'CREDIT'
+    const value = parts.slice(1).join(':').trim() || 'N/A'
+    return { label, value }
+  })
+}
+
 const handleCreate = async () => {
   formError.value = ''
   if (!formData.value.title) {
@@ -153,6 +184,7 @@ const handleCreate = async () => {
         const [name, role] = line.split('-').map((s) => s.trim())
         return { name: name || line, role: role || 'Member' }
       }),
+      music_credits: parseCreditsText(formData.value.credits_text),
     }
 
     await $fetch('/api/admin/press-releases', {
@@ -172,6 +204,14 @@ const handleCreate = async () => {
 const openEditModal = (item: PressRelease) => {
   selectedItem.value = item
   activeTab.value = 'hero'
+  
+  let formattedCredits = ''
+  if (Array.isArray(item.music_credits) && item.music_credits.length > 0) {
+    formattedCredits = item.music_credits.map((c) => `${c.label}: ${c.value}`).join('\n')
+  } else {
+    formattedCredits = defaultMusicCredits.map((c) => `${c.label}: ${c.value}`).join('\n')
+  }
+
   formData.value = {
     id: item.id,
     title: item.title,
@@ -180,8 +220,8 @@ const openEditModal = (item: PressRelease) => {
     cover_image_url: item.cover_image_url || '',
     hero_bg_url: item.hero_bg_url || '',
     release_date: item.release_date || '',
-    genre: item.genre || 'Extreme Death Metal',
-    producer: item.producer || 'WHITEEYES',
+    genre: item.genre || 'Death Metal',
+    producer: item.producer || 'Trojan',
     label: item.label || 'Iron Tomb Records',
     listen_url: item.listen_url || '',
     video_url: item.video_url || '',
@@ -198,13 +238,21 @@ const openEditModal = (item: PressRelease) => {
     legacy_points_text: Array.isArray(item.legacy_points) ? item.legacy_points.join('\n') : '',
     current_title: item.current_title || 'ANICONISM NOW',
     current_points_text: Array.isArray(item.current_points) ? item.current_points.join('\n') : '',
+    sound_character: item.sound_character || '',
     quote_text: item.quote_text || '',
     quote_author: item.quote_author || '',
     personnel_body: item.personnel_body || '',
     personnel_text: Array.isArray(item.personnel_members) ? item.personnel_members.map((m) => `${m.name} - ${m.role}`).join('\n') : '',
+    contact_phone: item.contact_phone || '085737122722 (Prabu)',
+    social_instagram: item.social_instagram || '@trojan_death',
+    social_facebook: item.social_facebook || 'trojandeath',
+    social_youtube: item.social_youtube || 'Trojan Death Bali',
+    discography_summary: item.discography_summary || '',
+    credits_text: formattedCredits,
+    lyrics: item.lyrics || '',
     video_embed_url: item.video_embed_url || '',
     tracklist_info: item.tracklist_info || '',
-    press_email: item.press_email || 'whiteeyes@gmail.com',
+    press_email: item.press_email || 'trojandeath79@gmail.com',
     meta_title: item.meta_title || '',
     meta_description: item.meta_description || '',
     meta_keywords: item.meta_keywords || '',
@@ -229,6 +277,7 @@ const handleEdit = async () => {
         const [name, role] = line.split('-').map((s) => s.trim())
         return { name: name || line, role: role || 'Member' }
       }),
+      music_credits: parseCreditsText(formData.value.credits_text),
     }
 
     await $fetch(`/api/admin/press-releases/${formData.value.id}`, {
@@ -294,7 +343,7 @@ const handleDelete = async () => {
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-void-border pb-6">
       <div>
         <h1 class="font-display text-3xl tracking-wider text-white uppercase">PRESS RELEASES & MANIFESTOS</h1>
-        <p class="font-sans text-xs text-gray-400 mt-1">Manage single, LP, and tour release statements.</p>
+        <p class="font-sans text-xs text-gray-400 mt-1">Manage single, LP, lyrics, personnel & credits statements.</p>
       </div>
 
       <button
@@ -351,14 +400,14 @@ const handleDelete = async () => {
                     <div v-else class="w-full h-full flex items-center justify-center text-[10px] text-gray-600">NO IMG</div>
                   </div>
                   <div>
-                    <h3 class="font-medium text-white line-clamp-1 max-w-md">{{ p.title }} <span class="text-xs text-red-400 font-mono">({{ p.subtitle || 'RELEASE' }})</span></h3>
+                    <h3 class="font-medium text-white line-clamp-1 max-w-md">{{ p.title }}</h3>
                     <p class="text-xs text-gray-400 font-mono line-clamp-1">/press-release/{{ p.slug }}</p>
                   </div>
                 </div>
               </td>
 
               <td class="py-4 px-6 text-xs font-mono text-gray-300">
-                {{ p.release_date || 'MAY 2024' }}
+                {{ p.release_date || '2024' }}
               </td>
 
               <td class="py-4 px-6">
@@ -404,15 +453,15 @@ const handleDelete = async () => {
 
         <!-- Form Tab Nav -->
         <div class="flex items-center gap-2 border-b border-void-border pb-3 overflow-x-auto text-xs font-mono">
-          <button @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">1. HERO & METADATA</button>
-          <button @click="activeTab = 'intro'" :class="activeTab === 'intro' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">2. INTRO STATEMENT</button>
-          <button @click="activeTab = 'feature'" :class="activeTab === 'feature' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">3. RITUAL FEATURE</button>
-          <button @click="activeTab = 'music'" :class="activeTab === 'music' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">4. MUSIC DIRECTION</button>
-          <button @click="activeTab = 'quote'" :class="activeTab === 'quote' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">5. QUOTE & MEMBERS</button>
+          <button @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">1. HEADER & MEDIA</button>
+          <button @click="activeTab = 'intro'" :class="activeTab === 'intro' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">2. PERSONIL & CONTACTS</button>
+          <button @click="activeTab = 'feature'" :class="activeTab === 'feature' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">3. STATEMENT & SOUND</button>
+          <button @click="activeTab = 'credits'" :class="activeTab === 'credits' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">4. MUSIC CREDITS</button>
+          <button @click="activeTab = 'lyrics'" :class="activeTab === 'lyrics' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">5. SONG LYRICS</button>
         </div>
 
         <form @submit.prevent="handleCreate" class="space-y-4 font-sans text-sm max-h-[65vh] overflow-y-auto pr-2">
-          <!-- TAB 1: HERO -->
+          <!-- TAB 1: HERO & MEDIA -->
           <div v-if="activeTab === 'hero'" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -420,122 +469,103 @@ const handleDelete = async () => {
                 <input v-model="formData.title" type="text" required placeholder="ANICONISM" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Subtitle / Tag</label>
-                <input v-model="formData.subtitle" type="text" placeholder="SINGLE 2024" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Subtitle / Headline</label>
+                <input v-model="formData.subtitle" type="text" placeholder="REPERTOAR ANICONISM BERTUTUR DALAM GAUNG PELESTARIAN" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Release Date</label>
-                <input v-model="formData.release_date" type="text" placeholder="MAY 2024" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Jenis Musik / Genre</label>
+                <input v-model="formData.genre" type="text" placeholder="Death Metal" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Genre Label</label>
-                <input v-model="formData.genre" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Release Date</label>
+                <input v-model="formData.release_date" type="text" placeholder="2024" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Record Label</label>
-                <input v-model="formData.label" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+                <input v-model="formData.label" type="text" placeholder="Iron Tomb Records" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Cover Artwork Photo URL</label>
+              <AdminImageUpload v-model="formData.cover_image_url" label="Artwork Image" />
+            </div>
+          </div>
+
+          <!-- TAB 2: PERSONIL & CONTACTS -->
+          <div v-if="activeTab === 'intro'" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Personil Lineup (Nama - Role per line)</label>
+              <textarea v-model="formData.personnel_text" rows="5" placeholder="Agus Purnama - Vokal&#10;Reo Rasyidi - Gitar&#10;Michael Perwira - Gitar&#10;Adi Pratama - Bass&#10;Agus Cahyadi - Drum" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Kontak Phone / Manager</label>
+                <input v-model="formData.contact_phone" type="text" placeholder="085737122722 (Prabu)" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Kontak Email</label>
+                <input v-model="formData.press_email" type="text" placeholder="trojandeath79@gmail.com" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Listen URL (Spotify)</label>
-                <input v-model="formData.listen_url" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Instagram</label>
+                <input v-model="formData.social_instagram" type="text" placeholder="@trojan_death" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Watch Video URL</label>
-                <input v-model="formData.video_url" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Facebook</label>
+                <input v-model="formData.social_facebook" type="text" placeholder="trojandeath" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Press Kit Download URL</label>
-                <input v-model="formData.press_kit_url" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">YouTube Channel</label>
+                <input v-model="formData.social_youtube" type="text" placeholder="Trojan Death Bali" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Cover Image URL</label>
-              <AdminImageUpload v-model="formData.cover_image_url" label="Release Artwork Photo" />
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Diskografi Summary</label>
+              <textarea v-model="formData.discography_summary" rows="4" placeholder="SINGLES:&#10;- Blackness Begins (2011)&#10;&#10;ALBUMS:&#10;- Archaic Dimension (2015)" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none"></textarea>
             </div>
           </div>
 
-          <!-- TAB 2: INTRO STATEMENT -->
-          <div v-if="activeTab === 'intro'" class="space-y-4">
-            <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Intro Statement Headline</label>
-              <input v-model="formData.intro_headline" type="text" placeholder="THE ECHOES OF CIVILIZATION'S DECAY." class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Statement Body Paragraph</label>
-              <textarea v-model="formData.intro_body" rows="4" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-void border border-void-border p-4 rounded-lg">
-              <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Highlight Card Title</label>
-                <input v-model="formData.highlight_title" type="text" placeholder="ENVIRONMENTAL DESTINY" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white focus:border-red-600 focus:outline-none" />
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Highlight Card Text</label>
-                <textarea v-model="formData.highlight_body" rows="2" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white focus:border-red-600 focus:outline-none"></textarea>
-              </div>
-            </div>
-          </div>
-
-          <!-- TAB 3: RITUAL FEATURE -->
+          <!-- TAB 3: STATEMENT & SOUND -->
           <div v-if="activeTab === 'feature'" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Feature Title</label>
-              <input v-model="formData.feature_title" type="text" placeholder="THE ANICONIC RITUAL" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Press Statement Main Paragraphs</label>
+              <textarea v-model="formData.intro_body" rows="6" placeholder="Etalase jiwa untuk kehidupan manusia..." class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Feature Body Description</label>
-              <textarea v-model="formData.feature_body" rows="3" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Tata Suara / Sound Character Description</label>
+              <textarea v-model="formData.sound_character" rows="3" placeholder="Karakter tata suaranya masih sama, namun yang berbuat berbeda adalah sedikit lebih low daripada sebelumnya..." class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
             </div>
 
-            <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Feature Art Photo</label>
-              <AdminImageUpload v-model="formData.feature_image_url" label="Feature Photo" />
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Feature Points (1 per line)</label>
-              <textarea v-model="formData.feature_points_text" rows="3" placeholder="01 - Destruction&#10;02 - Rebirth" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none"></textarea>
-            </div>
-          </div>
-
-          <!-- TAB 4: MUSIC DIRECTION -->
-          <div v-if="activeTab === 'music'" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="bg-void border border-void-border p-4 rounded-lg space-y-3">
-                <h4 class="font-mono text-xs text-gray-400 uppercase">PREVIOUS SOUND (LEGACY)</h4>
-                <input v-model="formData.legacy_title" type="text" placeholder="THE LEGACY" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white" />
-                <textarea v-model="formData.legacy_points_text" rows="4" placeholder="Points 1 per line..." class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 font-mono text-xs text-white"></textarea>
-              </div>
-
-              <div class="bg-void border border-void-border p-4 rounded-lg space-y-3">
-                <h4 class="font-mono text-xs text-red-400 uppercase">CURRENT SOUND (NOW)</h4>
-                <input v-model="formData.current_title" type="text" placeholder="ANICONISM NOW" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white" />
-                <textarea v-model="formData.current_points_text" rows="4" placeholder="Points 1 per line..." class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 font-mono text-xs text-white"></textarea>
-              </div>
-            </div>
-          </div>
-
-          <!-- TAB 5: QUOTE & MEMBERS -->
-          <div v-if="activeTab === 'quote'" class="space-y-4">
             <div class="bg-void border border-void-border p-4 rounded-lg space-y-3">
               <h4 class="font-mono text-xs text-blood uppercase">FEATURED QUOTE CALLOUT</h4>
-              <textarea v-model="formData.quote_text" rows="3" placeholder="UNDERSTANDING THAT EARTH IS NOT OWNED BY HUMANS ALONE..." class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white"></textarea>
-              <input v-model="formData.quote_author" type="text" placeholder="ARYS PRIHADI, Vocalist" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white" />
+              <textarea v-model="formData.quote_text" rows="3" placeholder="Satu pesan moral yang ingin disampaikan..." class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white"></textarea>
+              <input v-model="formData.quote_author" type="text" placeholder="Agus Purnama, Vocalist" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white" />
             </div>
+          </div>
 
+          <!-- TAB 4: MUSIC CREDITS -->
+          <div v-if="activeTab === 'credits'" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Band Personnel (Name - Role per line)</label>
-              <textarea v-model="formData.personnel_text" rows="4" placeholder="ARYS PRIHADI - Vocalist&#10;EKO RUSTON - Guitarist" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white"></textarea>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Music Credit & Creative (Label: Value per line)</label>
+              <textarea v-model="formData.credits_text" rows="10" placeholder="JUDUL LAGU: Aniconism&#10;EKSEKUTIF PRODUSER: Trojan&#10;MIXING: Indra Komenk&#10;MASTERING: Indra Komenk" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none"></textarea>
+            </div>
+          </div>
+
+          <!-- TAB 5: SONG LYRICS -->
+          <div v-if="activeTab === 'lyrics'" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Lirik Lagu (Full Song Lyrics Text)</label>
+              <textarea v-model="formData.lyrics" rows="12" placeholder="In a world of power, where ego reigns pulling the strings..." class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none leading-relaxed"></textarea>
             </div>
           </div>
 
@@ -562,15 +592,15 @@ const handleDelete = async () => {
         </div>
 
         <div class="flex items-center gap-2 border-b border-void-border pb-3 overflow-x-auto text-xs font-mono">
-          <button @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">1. HERO & METADATA</button>
-          <button @click="activeTab = 'intro'" :class="activeTab === 'intro' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">2. INTRO STATEMENT</button>
-          <button @click="activeTab = 'feature'" :class="activeTab === 'feature' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">3. RITUAL FEATURE</button>
-          <button @click="activeTab = 'music'" :class="activeTab === 'music' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">4. MUSIC DIRECTION</button>
-          <button @click="activeTab = 'quote'" :class="activeTab === 'quote' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">5. QUOTE & MEMBERS</button>
+          <button @click="activeTab = 'hero'" :class="activeTab === 'hero' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">1. HEADER & MEDIA</button>
+          <button @click="activeTab = 'intro'" :class="activeTab === 'intro' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">2. PERSONIL & CONTACTS</button>
+          <button @click="activeTab = 'feature'" :class="activeTab === 'feature' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">3. STATEMENT & SOUND</button>
+          <button @click="activeTab = 'credits'" :class="activeTab === 'credits' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">4. MUSIC CREDITS</button>
+          <button @click="activeTab = 'lyrics'" :class="activeTab === 'lyrics' ? 'bg-blood text-white' : 'text-gray-400 bg-void'" class="px-3 py-1.5 rounded">5. SONG LYRICS</button>
         </div>
 
         <form @submit.prevent="handleEdit" class="space-y-4 font-sans text-sm max-h-[65vh] overflow-y-auto pr-2">
-          <!-- TAB 1: HERO -->
+          <!-- TAB 1: HERO & MEDIA -->
           <div v-if="activeTab === 'hero'" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -578,19 +608,19 @@ const handleDelete = async () => {
                 <input v-model="formData.title" type="text" required class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Subtitle / Tag</label>
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Subtitle / Headline</label>
                 <input v-model="formData.subtitle" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Release Date</label>
-                <input v-model="formData.release_date" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Jenis Musik / Genre</label>
+                <input v-model="formData.genre" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Genre Label</label>
-                <input v-model="formData.genre" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Release Date</label>
+                <input v-model="formData.release_date" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
               </div>
               <div>
                 <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Record Label</label>
@@ -598,102 +628,83 @@ const handleDelete = async () => {
               </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Listen URL</label>
-                <input v-model="formData.listen_url" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Watch Video URL</label>
-                <input v-model="formData.video_url" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Press Kit URL</label>
-                <input v-model="formData.press_kit_url" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
-              </div>
-            </div>
-
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Cover Image URL</label>
-              <AdminImageUpload v-model="formData.cover_image_url" label="Release Artwork Photo" />
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Cover Artwork Photo URL</label>
+              <AdminImageUpload v-model="formData.cover_image_url" label="Artwork Image" />
             </div>
           </div>
 
-          <!-- TAB 2: INTRO STATEMENT -->
+          <!-- TAB 2: PERSONIL & CONTACTS -->
           <div v-if="activeTab === 'intro'" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Intro Statement Headline</label>
-              <input v-model="formData.intro_headline" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Personil Lineup (Nama - Role per line)</label>
+              <textarea v-model="formData.personnel_text" rows="5" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Kontak Phone / Manager</label>
+                <input v-model="formData.contact_phone" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Kontak Email</label>
+                <input v-model="formData.press_email" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Instagram</label>
+                <input v-model="formData.social_instagram" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Facebook</label>
+                <input v-model="formData.social_facebook" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">YouTube Channel</label>
+                <input v-model="formData.social_youtube" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+              </div>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Statement Body Paragraph</label>
-              <textarea v-model="formData.intro_body" rows="4" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-void border border-void-border p-4 rounded-lg">
-              <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Highlight Title</label>
-                <input v-model="formData.highlight_title" type="text" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white" />
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Highlight Text</label>
-                <textarea v-model="formData.highlight_body" rows="2" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white"></textarea>
-              </div>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Diskografi Summary</label>
+              <textarea v-model="formData.discography_summary" rows="4" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none"></textarea>
             </div>
           </div>
 
-          <!-- TAB 3: RITUAL FEATURE -->
+          <!-- TAB 3: STATEMENT & SOUND -->
           <div v-if="activeTab === 'feature'" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Feature Title</label>
-              <input v-model="formData.feature_title" type="text" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none" />
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Press Statement Main Paragraphs</label>
+              <textarea v-model="formData.intro_body" rows="6" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Feature Description</label>
-              <textarea v-model="formData.feature_body" rows="3" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Tata Suara / Sound Character Description</label>
+              <textarea v-model="formData.sound_character" rows="3" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
             </div>
 
-            <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Feature Image</label>
-              <AdminImageUpload v-model="formData.feature_image_url" label="Feature Photo" />
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Feature Points (1 per line)</label>
-              <textarea v-model="formData.feature_points_text" rows="3" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white"></textarea>
-            </div>
-          </div>
-
-          <!-- TAB 4: MUSIC DIRECTION -->
-          <div v-if="activeTab === 'music'" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="bg-void border border-void-border p-4 rounded-lg space-y-3">
-                <h4 class="font-mono text-xs text-gray-400 uppercase">PREVIOUS SOUND (LEGACY)</h4>
-                <input v-model="formData.legacy_title" type="text" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white" />
-                <textarea v-model="formData.legacy_points_text" rows="4" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 font-mono text-xs text-white"></textarea>
-              </div>
-
-              <div class="bg-void border border-void-border p-4 rounded-lg space-y-3">
-                <h4 class="font-mono text-xs text-red-400 uppercase">CURRENT SOUND (NOW)</h4>
-                <input v-model="formData.current_title" type="text" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white" />
-                <textarea v-model="formData.current_points_text" rows="4" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 font-mono text-xs text-white"></textarea>
-              </div>
-            </div>
-          </div>
-
-          <!-- TAB 5: QUOTE & MEMBERS -->
-          <div v-if="activeTab === 'quote'" class="space-y-4">
             <div class="bg-void border border-void-border p-4 rounded-lg space-y-3">
               <h4 class="font-mono text-xs text-blood uppercase">FEATURED QUOTE CALLOUT</h4>
               <textarea v-model="formData.quote_text" rows="3" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white"></textarea>
               <input v-model="formData.quote_author" type="text" class="w-full bg-void-charcoal border border-void-border rounded px-3 py-1.5 text-xs text-white" />
             </div>
+          </div>
 
+          <!-- TAB 4: MUSIC CREDITS -->
+          <div v-if="activeTab === 'credits'" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Band Personnel (Name - Role per line)</label>
-              <textarea v-model="formData.personnel_text" rows="4" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white"></textarea>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Music Credit & Creative (Label: Value per line)</label>
+              <textarea v-model="formData.credits_text" rows="10" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none"></textarea>
+            </div>
+          </div>
+
+          <!-- TAB 5: SONG LYRICS -->
+          <div v-if="activeTab === 'lyrics'" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Lirik Lagu (Full Song Lyrics Text)</label>
+              <textarea v-model="formData.lyrics" rows="12" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none leading-relaxed"></textarea>
             </div>
           </div>
 
