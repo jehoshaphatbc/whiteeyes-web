@@ -150,17 +150,15 @@ useHead({
             </div>
 
             <!-- Main Narrative Body Paragraphs -->
-            <div class="prose prose-invert max-w-none font-sans text-gray-300 text-base sm:text-lg leading-relaxed whitespace-pre-line space-y-6">
-              {{ pr.intro_body }}
+            <div class="prose prose-invert max-w-none font-sans text-gray-300 text-base sm:text-lg leading-relaxed whitespace-pre-line space-y-6" v-html="pr.intro_body">
             </div>
 
             <!-- Sound Character & Musical Direction -->
             <div v-if="pr.sound_character" class="bg-void-charcoal border border-void-border rounded-xl p-8 space-y-4">
               <span class="font-mono text-xs text-blood tracking-widest uppercase">// TATA SUARA & DIRECTION</span>
               <h3 class="font-display text-2xl text-white uppercase">TATA SUARA & CHARACTER</h3>
-              <p class="font-sans text-ash text-base leading-relaxed">
-                {{ pr.sound_character }}
-              </p>
+              <div class="font-sans text-ash text-base leading-relaxed" v-html="pr.sound_character">
+              </div>
             </div>
 
             <!-- Featured Quote Callout Block -->
@@ -211,8 +209,7 @@ useHead({
             </h2>
           </div>
 
-          <div class="max-w-2xl mx-auto font-mono text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line tracking-wide space-y-4">
-            {{ pr.lyrics }}
+          <div class="max-w-2xl mx-auto font-mono text-sm sm:text-base text-gray-200 leading-relaxed whitespace-pre-line tracking-wide space-y-4" v-html="pr.lyrics">
           </div>
 
           <div class="pt-8 border-t border-void-border text-center">

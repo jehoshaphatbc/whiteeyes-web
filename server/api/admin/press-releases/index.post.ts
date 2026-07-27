@@ -13,6 +13,30 @@ function slugify(text: string): string {
     .replace(/-+$/, '')
 }
 
+function parseJsonField(field: any) {
+  if (!field) return []
+  if (typeof field === 'string') {
+    try {
+      return JSON.parse(field)
+    } catch {
+      return []
+    }
+  }
+  return field
+}
+
+function normalizePressRelease(item: any) {
+  if (!item) return item
+  return {
+    ...item,
+    personnel_members: parseJsonField(item.personnel_members),
+    music_credits: parseJsonField(item.music_credits),
+    feature_points: parseJsonField(item.feature_points),
+    legacy_points: parseJsonField(item.legacy_points),
+    current_points: parseJsonField(item.current_points),
+  }
+}
+
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const { title } = body
@@ -23,6 +47,12 @@ export default defineEventHandler(async (event) => {
 
   const generatedSlug = body.slug ? slugify(body.slug) : slugify(title)
   const cleanSlug = generatedSlug || `release-${Date.now()}`
+
+  const featurePoints = Array.isArray(body.feature_points) ? body.feature_points : []
+  const legacyPoints = Array.isArray(body.legacy_points) ? body.legacy_points : []
+  const currentPoints = Array.isArray(body.current_points) ? body.current_points : []
+  const personnelMembers = Array.isArray(body.personnel_members) ? body.personnel_members : []
+  const musicCredits = Array.isArray(body.music_credits) ? body.music_credits : []
 
   const sql = getDb()
 
@@ -45,17 +75,17 @@ export default defineEventHandler(async (event) => {
         ${body.release_date || ''}, ${body.genre || 'Death Metal'}, ${body.producer || 'Trojan'}, ${body.label || 'Iron Tomb Records'},
         ${body.listen_url || ''}, ${body.video_url || ''}, ${body.press_kit_url || ''}, ${body.intro_headline || ''}, ${body.intro_body || ''},
         ${body.highlight_title || ''}, ${body.highlight_body || ''}, ${body.feature_title || ''}, ${body.feature_body || ''}, ${body.feature_image_url || ''},
-        ${JSON.stringify(body.feature_points || [])}, ${body.legacy_title || ''}, ${JSON.stringify(body.legacy_points || [])},
-        ${body.current_title || ''}, ${JSON.stringify(body.current_points || [])}, ${body.sound_character || ''}, ${body.quote_text || ''}, ${body.quote_author || ''},
-        ${body.personnel_body || ''}, ${JSON.stringify(body.personnel_members || [])},
+        ${sql.json(featurePoints)}, ${body.legacy_title || ''}, ${sql.json(legacyPoints)},
+        ${body.current_title || ''}, ${sql.json(currentPoints)}, ${body.sound_character || ''}, ${body.quote_text || ''}, ${body.quote_author || ''},
+        ${body.personnel_body || ''}, ${sql.json(personnelMembers)},
         ${body.contact_phone || ''}, ${body.social_instagram || ''}, ${body.social_facebook || ''}, ${body.social_youtube || ''},
-        ${body.discography_summary || ''}, ${JSON.stringify(body.music_credits || [])}, ${body.lyrics || ''},
+        ${body.discography_summary || ''}, ${sql.json(musicCredits)}, ${body.lyrics || ''},
         ${body.video_embed_url || ''}, ${body.tracklist_info || ''},
         ${body.press_email || 'trojandeath79@gmail.com'}, ${body.meta_title || ''}, ${body.meta_description || ''}, ${body.meta_keywords || ''}, ${body.is_published !== false}
       )
       RETURNING *
     `
-    return newItem
+    return normalizePressRelease(newItem)
   }
 
   // Memory store fallback
@@ -89,22 +119,22 @@ export default defineEventHandler(async (event) => {
     feature_title: body.feature_title || '',
     feature_body: body.feature_body || '',
     feature_image_url: body.feature_image_url || '',
-    feature_points: body.feature_points || [],
+    feature_points: featurePoints,
     legacy_title: body.legacy_title || '',
-    legacy_points: body.legacy_points || [],
+    legacy_points: legacyPoints,
     current_title: body.current_title || '',
-    current_points: body.current_points || [],
+    current_points: currentPoints,
     sound_character: body.sound_character || '',
     quote_text: body.quote_text || '',
     quote_author: body.quote_author || '',
     personnel_body: body.personnel_body || '',
-    personnel_members: body.personnel_members || [],
+    personnel_members: personnelMembers,
     contact_phone: body.contact_phone || '',
     social_instagram: body.social_instagram || '',
     social_facebook: body.social_facebook || '',
     social_youtube: body.social_youtube || '',
     discography_summary: body.discography_summary || '',
-    music_credits: body.music_credits || [],
+    music_credits: musicCredits,
     lyrics: body.lyrics || '',
     video_embed_url: body.video_embed_url || '',
     tracklist_info: body.tracklist_info || '',
@@ -118,5 +148,5 @@ export default defineEventHandler(async (event) => {
   }
 
   memoryStore.pressReleases.unshift(newItem)
-  return newItem
+  return normalizePressRelease(newItem)
 })
