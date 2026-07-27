@@ -1,11 +1,35 @@
 import { getDb } from '../../database/db'
 import { memoryStore } from '../../database/schema'
 
+function parseJsonField(field: any) {
+  if (!field) return []
+  if (typeof field === 'string') {
+    try {
+      return JSON.parse(field)
+    } catch {
+      return []
+    }
+  }
+  return field
+}
+
+function normalizePressRelease(item: any) {
+  if (!item) return item
+  return {
+    ...item,
+    personnel_members: parseJsonField(item.personnel_members),
+    music_credits: parseJsonField(item.music_credits),
+    feature_points: parseJsonField(item.feature_points),
+    legacy_points: parseJsonField(item.legacy_points),
+    current_points: parseJsonField(item.current_points),
+  }
+}
+
 export default defineEventHandler(async () => {
   const sql = getDb()
 
   if (!sql) {
-    return memoryStore.pressReleases.filter((pr: any) => pr.is_published)
+    return memoryStore.pressReleases.filter((pr: any) => pr.is_published).map(normalizePressRelease)
   }
 
   const items = await sql`
@@ -13,5 +37,5 @@ export default defineEventHandler(async () => {
     WHERE is_published = TRUE
     ORDER BY created_at DESC
   `
-  return items
+  return items.map(normalizePressRelease)
 })
