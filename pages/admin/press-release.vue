@@ -537,13 +537,13 @@ const handleDelete = async () => {
           <!-- TAB 3: STATEMENT & SOUND -->
           <div v-if="activeTab === 'feature'" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Press Statement Main Paragraphs</label>
-              <textarea v-model="formData.intro_body" rows="6" placeholder="Etalase jiwa untuk kehidupan manusia..." class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Press Statement Main Paragraphs (WYSIWYG Rich Text)</label>
+              <AdminWysiwygEditor v-model="formData.intro_body" placeholder="Write press statement main paragraphs..." />
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Tata Suara / Sound Character Description</label>
-              <textarea v-model="formData.sound_character" rows="3" placeholder="Karakter tata suaranya masih sama, namun yang berbuat berbeda adalah sedikit lebih low daripada sebelumnya..." class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Tata Suara / Sound Character Description (WYSIWYG Rich Text)</label>
+              <AdminWysiwygEditor v-model="formData.sound_character" placeholder="Write sound character description..." />
             </div>
 
             <div class="bg-void border border-void-border p-4 rounded-lg space-y-3">
@@ -564,8 +564,8 @@ const handleDelete = async () => {
           <!-- TAB 5: SONG LYRICS -->
           <div v-if="activeTab === 'lyrics'" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Lirik Lagu (Full Song Lyrics Text)</label>
-              <textarea v-model="formData.lyrics" rows="12" placeholder="In a world of power, where ego reigns pulling the strings..." class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none leading-relaxed"></textarea>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Lirik Lagu (Full Song Lyrics WYSIWYG Editor)</label>
+              <AdminWysiwygEditor v-model="formData.lyrics" placeholder="Write or paste song lyrics..." />
             </div>
           </div>
 
@@ -676,13 +676,13 @@ const handleDelete = async () => {
           <!-- TAB 3: STATEMENT & SOUND -->
           <div v-if="activeTab === 'feature'" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Press Statement Main Paragraphs</label>
-              <textarea v-model="formData.intro_body" rows="6" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Press Statement Main Paragraphs (WYSIWYG Rich Text)</label>
+              <AdminWysiwygEditor v-model="formData.intro_body" placeholder="Write press statement main paragraphs..." />
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Tata Suara / Sound Character Description</label>
-              <textarea v-model="formData.sound_character" rows="3" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 text-white focus:border-red-600 focus:outline-none"></textarea>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Tata Suara / Sound Character Description (WYSIWYG Rich Text)</label>
+              <AdminWysiwygEditor v-model="formData.sound_character" placeholder="Write sound character description..." />
             </div>
 
             <div class="bg-void border border-void-border p-4 rounded-lg space-y-3">
@@ -703,8 +703,8 @@ const handleDelete = async () => {
           <!-- TAB 5: SONG LYRICS -->
           <div v-if="activeTab === 'lyrics'" class="space-y-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Lirik Lagu (Full Song Lyrics Text)</label>
-              <textarea v-model="formData.lyrics" rows="12" class="w-full bg-void border border-void-border rounded-lg px-3.5 py-2 font-mono text-xs text-white focus:border-red-600 focus:outline-none leading-relaxed"></textarea>
+              <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Lirik Lagu (Full Song Lyrics WYSIWYG Editor)</label>
+              <AdminWysiwygEditor v-model="formData.lyrics" placeholder="Write or paste song lyrics..." />
             </div>
           </div>
 
