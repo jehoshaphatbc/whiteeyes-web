@@ -176,6 +176,51 @@ export const memoryStore = {
     { id: 3, name: 'Tour News', slug: 'tour-news', created_at: new Date().toISOString() },
     { id: 4, name: 'Merchandise', slug: 'merchandise', created_at: new Date().toISOString() },
   ],
+  pressReleases: [
+    {
+      id: 1,
+      title: 'ANICONISM',
+      subtitle: 'SINGLE 2024',
+      slug: 'aniconism-single-2024',
+      cover_image_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop',
+      hero_bg_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop',
+      release_date: 'MAY 2024',
+      genre: 'Extreme Death Metal',
+      producer: 'WHITEEYES',
+      label: 'Iron Tomb Records',
+      listen_url: 'https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02',
+      video_url: 'https://youtube.com/@whiteeyesmetal',
+      press_kit_url: 'https://drive.google.com',
+      intro_headline: "THE ECHOES OF CIVILIZATION'S DECAY.",
+      intro_body: 'Forged in the cavernous rehearsal spaces of Jakarta, our latest single ANICONISM explores the inevitable collapse of anthropocentric arrogance. Engineered with raw valve amplifiers and analog tape saturation.',
+      highlight_title: 'ENVIRONMENTAL DESTINY',
+      highlight_body: 'Exploring the terrifying reality of ecological dissolution and human mortality under catastrophic climate degradation.',
+      feature_title: 'THE ANICONIC RITUAL',
+      feature_body: 'Rejecting modern digital sterility, ANICONISM was recorded live in single takes to preserve subterranean resonance and unbridled aggression.',
+      feature_image_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
+      feature_points: ['01 - Destruction', '02 - Rebirth', '03 - Dissolution'],
+      legacy_title: 'THE LEGACY',
+      legacy_points: ['Raw Analog Production', 'Suffocating Dissonance', 'Traditional Tremolo'],
+      current_title: 'ANICONISM NOW',
+      current_points: ['Expanded Dynamics', 'Devastating Down-tuned Riffs', 'Cavernous Echoes'],
+      quote_text: 'UNDERSTANDING THAT EARTH IS NOT OWNED BY HUMANS ALONE... REDUCING HUMAN AMBITION... MAINTAINING EARTH AS A PEACEFUL PLACE TO LIVE.',
+      quote_author: 'ARYS PRIHADI, Vocalist',
+      personnel_body: 'Recorded live at Subterranean Bunker Studios, Jakarta. Mastered for vinyl and high-resolution digital playback.',
+      personnel_members: [
+        { name: 'ARYS PRIHADI', role: 'Vocalist' },
+        { name: 'EKO RUSTON', role: 'Guitarist' },
+        { name: 'MICHAEL PRIHADI', role: 'Drums' },
+        { name: 'ARI PRATAMA', role: 'Bass' },
+        { name: 'AGUS FAUZI', role: 'Lead Guitar' },
+      ],
+      video_embed_url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      tracklist_info: 'Track 1: Aniconism (05:42)\nTrack 2: Monolith of Filth - Live (04:18)',
+      press_email: 'whiteeyes@gmail.com',
+      is_published: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+  ],
 }
 
 export async function ensureDbSchema() {
@@ -442,6 +487,60 @@ export async function ensureDbSchema() {
     if (cats.length === 0) {
       for (const c of memoryStore.blogCategories) {
         await sql`INSERT INTO blog_categories (id, name, slug) VALUES (${c.id}, ${c.name}, ${c.slug})`
+      }
+    }
+
+    // Create & Seed Press Releases table
+    await sql`
+      CREATE TABLE IF NOT EXISTS press_releases (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        subtitle VARCHAR(255),
+        slug VARCHAR(255) UNIQUE NOT NULL,
+        cover_image_url TEXT,
+        hero_bg_url TEXT,
+        release_date VARCHAR(100),
+        genre VARCHAR(100) DEFAULT 'Extreme Death Metal',
+        producer VARCHAR(100) DEFAULT 'WHITEEYES',
+        label VARCHAR(100) DEFAULT 'Iron Tomb Records',
+        listen_url TEXT,
+        video_url TEXT,
+        press_kit_url TEXT,
+        intro_headline TEXT,
+        intro_body TEXT,
+        highlight_title VARCHAR(255),
+        highlight_body TEXT,
+        feature_title VARCHAR(255),
+        feature_body TEXT,
+        feature_image_url TEXT,
+        feature_points JSONB,
+        legacy_title VARCHAR(255),
+        legacy_points JSONB,
+        current_title VARCHAR(255),
+        current_points JSONB,
+        quote_text TEXT,
+        quote_author VARCHAR(255),
+        personnel_body TEXT,
+        personnel_members JSONB,
+        video_embed_url TEXT,
+        tracklist_info TEXT,
+        press_email VARCHAR(255) DEFAULT 'whiteeyes@gmail.com',
+        meta_title VARCHAR(255),
+        meta_description TEXT,
+        meta_keywords VARCHAR(255),
+        is_published BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `
+    // Seed Press Releases if missing
+    const prs = await sql`SELECT id FROM press_releases LIMIT 1`
+    if (prs.length === 0) {
+      for (const pr of memoryStore.pressReleases) {
+        await sql`
+          INSERT INTO press_releases (title, subtitle, slug, cover_image_url, hero_bg_url, release_date, genre, producer, label, listen_url, video_url, press_kit_url, intro_headline, intro_body, highlight_title, highlight_body, feature_title, feature_body, feature_image_url, feature_points, legacy_title, legacy_points, current_title, current_points, quote_text, quote_author, personnel_body, personnel_members, video_embed_url, tracklist_info, press_email, is_published)
+          VALUES (${pr.title}, ${pr.subtitle}, ${pr.slug}, ${pr.cover_image_url}, ${pr.hero_bg_url}, ${pr.release_date}, ${pr.genre}, ${pr.producer}, ${pr.label}, ${pr.listen_url}, ${pr.video_url}, ${pr.press_kit_url}, ${pr.intro_headline}, ${pr.intro_body}, ${pr.highlight_title}, ${pr.highlight_body}, ${pr.feature_title}, ${pr.feature_body}, ${pr.feature_image_url}, ${JSON.stringify(pr.feature_points)}, ${pr.legacy_title}, ${JSON.stringify(pr.legacy_points)}, ${pr.current_title}, ${JSON.stringify(pr.current_points)}, ${pr.quote_text}, ${pr.quote_author}, ${pr.personnel_body}, ${JSON.stringify(pr.personnel_members)}, ${pr.video_embed_url}, ${pr.tracklist_info}, ${pr.press_email}, ${pr.is_published})
+        `
       }
     }
   } catch (err) {

@@ -151,3 +151,64 @@ export interface BlogPost {
   created_at?: string
   updated_at?: string
 }
+
+export interface PressReleasePersonnel {
+  name: string
+  role: string
+}
+
+export interface PressRelease {
+  id: number
+  title: string
+  subtitle?: string
+  slug: string
+  cover_image_url?: string
+  hero_bg_url?: string
+  release_date?: string
+  genre?: string
+  producer?: string
+  label?: string
+  listen_url?: string
+  video_url?: string
+  press_kit_url?: string
+  
+  // Statement Intro
+  intro_headline?: string
+  intro_body?: string
+  highlight_title?: string
+  highlight_body?: string
+
+  // Feature Ritual Section
+  feature_title?: string
+  feature_body?: string
+  feature_image_url?: string
+  feature_points?: string[]
+
+  // Music Direction Comparison
+  legacy_title?: string
+  legacy_points?: string[]
+  current_title?: string
+  current_points?: string[]
+
+  // Quote Callout
+  quote_text?: string
+  quote_author?: string
+
+  // Personnel & Tracklist
+  personnel_body?: string
+  personnel_members?: PressReleasePersonnel[]
+  video_embed_url?: string
+  tracklist_info?: string
+
+  // Press Contact
+  press_email?: string
+  
+  // Status & SEO
+  meta_title?: string
+  meta_description?: string
+  meta_keywords?: string
+  is_published: boolean
+  created_at?: string
+  updated_at?: string
+}
+
