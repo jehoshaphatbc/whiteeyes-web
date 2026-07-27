@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PressRelease } from '~/types/content'
+import type { PressRelease, PressReleasePersonnel, PressReleaseCredit } from '~/types/content'
 
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
@@ -12,6 +12,25 @@ const { data: pr, error } = await useFetch<PressRelease>(`/api/press-releases/${
 if (error.value || !pr.value) {
   throw createError({ statusCode: 404, statusMessage: 'Press release transmission not found' })
 }
+
+const parseArray = <T = any>(field: any): T[] => {
+  if (!field) return []
+  if (typeof field === 'string') {
+    try {
+      const parsed = JSON.parse(field)
+      return Array.isArray(parsed) ? parsed : []
+    } catch {
+      return []
+    }
+  }
+  return Array.isArray(field) ? field : []
+}
+
+const personnelMembers = computed<PressReleasePersonnel[]>(() => parseArray(pr.value?.personnel_members))
+const musicCredits = computed<PressReleaseCredit[]>(() => parseArray(pr.value?.music_credits))
+const featurePoints = computed<string[]>(() => parseArray(pr.value?.feature_points))
+const legacyPoints = computed<string[]>(() => parseArray(pr.value?.legacy_points))
+const currentPoints = computed<string[]>(() => parseArray(pr.value?.current_points))
 
 // SEO Head injection
 const siteUrl = 'https://whiteeyes-web.vercel.app'
@@ -87,7 +106,7 @@ useHead({
             <div class="space-y-2 border-b border-void-border/60 pb-6">
               <h3 class="font-display text-lg text-white uppercase tracking-wider">PERSONIL:</h3>
               <ul class="space-y-1 font-mono text-xs text-gray-300">
-                <li v-for="(person, idx) in (pr.personnel_members || [])" :key="idx" class="flex items-center justify-between">
+                <li v-for="(person, idx) in personnelMembers" :key="idx" class="flex items-center justify-between">
                   <span class="text-white font-medium">{{ person.name }}</span>
                   <span class="text-ash">({{ person.role }})</span>
                 </li>
@@ -163,7 +182,7 @@ useHead({
         </div>
 
         <!-- FULL-WIDTH SECTION: MUSIC CREDIT & CREATIVE (PDF PAGE 4) -->
-        <section v-if="pr.music_credits && pr.music_credits.length" class="bg-void-charcoal border border-void-border rounded-xl p-8 sm:p-12 space-y-8 shadow-2xl">
+        <section v-if="musicCredits.length" class="bg-void-charcoal border border-void-border rounded-xl p-8 sm:p-12 space-y-8 shadow-2xl">
           <div class="text-center max-w-2xl mx-auto space-y-2 border-b border-void-border pb-6">
             <span class="font-mono text-xs text-blood tracking-widest uppercase">// PRODUCTION & CREATIVE TEAM</span>
             <h2 class="font-display text-4xl sm:text-5xl text-white uppercase tracking-wider">
@@ -173,7 +192,7 @@ useHead({
 
           <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs sm:text-sm">
             <div
-              v-for="(credit, idx) in pr.music_credits"
+              v-for="(credit, idx) in musicCredits"
               :key="idx"
               class="bg-void border border-void-border/80 p-4 rounded-lg flex items-center justify-between"
             >
